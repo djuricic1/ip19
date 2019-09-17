@@ -33,6 +33,10 @@ public class StudentBean implements Serializable {
 		return student;
 	}
 	
+	public void setUser(Student student) {
+		this.student = student;
+	}
+	
 	public boolean add(Student student) {
 		return sdi.insertStudent(student);
 	}

@@ -11,11 +11,11 @@
 	<body>
 		<h1>UniShare</h1>
 		<h2>Login</h2>
-		<form method="POST" action="?action=login">
+		<form method="POST" action="Controller?action=login">
 			Korisni&#269;ko ime<br /> <input type="text" name="username"
 				id="username" /><br /> Lozinka <br /> <input type="password"
 				name="password" id="password" /><br /> <input type="submit"
-				value="Prijavi me" name="submit" /><br />
+				value="Log In" name="submit" /><br />
 			<!-- <h3><%=session.getAttribute("notification")!=null?session.getAttribute("notification").toString():""%></h3> 
 			<br /> <a href="?action=registration">Kreiraj novi nalog &gt;&gt;&gt;</a>   -->
 		</form>

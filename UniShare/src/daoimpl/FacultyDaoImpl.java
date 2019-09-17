@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.FacultyDao;
 import dto.Faculty;
@@ -12,7 +14,7 @@ public class FacultyDaoImpl implements FacultyDao {
 
 	private static ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
 	private static final String SQL_GET_BY_ID = "SELECT * FROM faculty WHERE id=?";
-	
+	private static final String SQL_GET_ALL = "SELECT * FROM faculty";
 	@Override
 	public Faculty getFacultyById(int id) {
 		Connection connection = null;
@@ -33,6 +35,31 @@ public class FacultyDaoImpl implements FacultyDao {
 			connectionPool.checkIn(connection);
 		}
 		return rV;
+	}
+
+	@Override
+	public List<Faculty> getAllFaculties() {
+		Connection connection = null;
+		ResultSet rs = null;
+		List<Faculty> faculties = new ArrayList<Faculty>();
+		try { 
+			connection = connectionPool.checkOut();
+			PreparedStatement pstmt = connection.prepareStatement(SQL_GET_ALL);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Faculty f = new Faculty();
+				f.setId(rs.getInt("id"));
+				f.setName(rs.getString("name"));
+				faculties.add(f);
+			}
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			connectionPool.checkIn(connection);
+		}
+		return faculties;
 	}
 
 }

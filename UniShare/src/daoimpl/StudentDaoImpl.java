@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +20,7 @@ public class StudentDaoImpl implements StudentDao{
 	private FacultyDaoImpl fdi = new FacultyDaoImpl();
 	private static final String SQL_SELECT_ALL = "SELECT * FROM student";
 	private static final String SQL_SELECT_BY_ID = "SELECT * FROM student WHERE student.id=?";
-	private static final String SQL_INSERT = "INSERT INTO `mydb`.`student` (`name`, `surname`, `username`, `password`, `mail`, `faculty_id`) VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT = "INSERT INTO `mydb`.`student` (`name`, `surname`, `username`, `password`, `mail`) VALUES (?, ?, ?, ?, ?)";
 	private static final String SQL_UPDATE = "UPDATE `mydb`.`student` SET `name` = ?, `surname` = ?, `username` = ?, `password` = ?, `mail` = ?, `description` = ?, `studyProgram` = ?, `facultyYear` = ?, `faculty_id` = ?,  `lastTimeActive` = ? WHERE (`id` = ?)";
 	private static final String SQL_UPDATE_TIME_ACTIVE = "UPDATE student SET lastTimeActive=? WHERE id=?";
 	private static final String SQL_SELECT_BY_NAME_AND_USERNAME = "SELECT * FROM student where student.username=? AND student.password=?";
@@ -119,7 +120,6 @@ public class StudentDaoImpl implements StudentDao{
 			preparedStmt.setString(3, student.getUsername());
 			preparedStmt.setString(4, student.getPassword());
 			preparedStmt.setString(5, student.getMail());
-			preparedStmt.setInt(6, student.getFaculty().getId());
 			
 			isSuccessful = preparedStmt.execute();
 			
@@ -127,6 +127,8 @@ public class StudentDaoImpl implements StudentDao{
 			
 			isSuccessful = true;
 			
+		} catch (SQLIntegrityConstraintViolationException e) {
+			return false;
 		} catch (SQLException e) {
 			// TODO add err hadnling for same username 
 			e.printStackTrace();

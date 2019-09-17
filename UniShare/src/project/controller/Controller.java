@@ -24,19 +24,20 @@ public class Controller extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
 		req.setCharacterEncoding("UTF-8");
-		String address = "/WEB-INF/pages/login.jsp";
+		String address = "/login.jsp";
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 
 		if (action == null || action.equals("")) {
-			address = "/WEB-INF/pages/login.jsp";
+			address = "/login.jsp";
 		} else if (action.equals("logout")) {
 			session.invalidate();
-			address = "/WEB-INF/pages/login.jsp";
+			address = "/login.jsp";
 		} else if (action.equals("login")) {
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
 			StudentBean studentBean = new StudentBean();
+			System.out.println(username + " " + password);
 			if(studentBean.login(username, password)) {
 				session.setAttribute("studentBean", studentBean);
 				address = "/WEB-INF/pages/updateProfile.jsp";
@@ -54,12 +55,13 @@ public class Controller extends HttpServlet {
 			student.setPassword(password);
 			student.setUsername(username);
 			student.setMail(mail);
+			studentBean.setUser(student);
 			if(studentBean.add(student)) {
 				session.setAttribute("studentBean", studentBean);
 				address = "/WEB-INF/pages/updateProfile.jsp";
 			}
 			else {
-				address = "/WEB-INF/pages/registration.jsp";
+				address = "/registration.jsp";
 			}
 		}
 		
