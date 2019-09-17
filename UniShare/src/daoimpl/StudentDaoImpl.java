@@ -22,7 +22,7 @@ public class StudentDaoImpl implements StudentDao{
 	private static final String SQL_INSERT = "INSERT INTO `mydb`.`student` (`name`, `surname`, `username`, `password`, `mail`, `faculty_id`) VALUES (?, ?, ?, ?, ?, ?)";
 	private static final String SQL_UPDATE = "UPDATE `mydb`.`student` SET `name` = ?, `surname` = ?, `username` = ?, `password` = ?, `mail` = ?, `description` = ?, `studyProgram` = ?, `facultyYear` = ?, `faculty_id` = ?,  `lastTimeActive` = ? WHERE (`id` = ?)";
 	private static final String SQL_UPDATE_TIME_ACTIVE = "UPDATE student SET lastTimeActive=? WHERE id=?";
-	
+	private static final String SQL_SELECT_BY_NAME_AND_USERNAME = "SELECT * FROM student where student.username=? AND student.password=?";
 	@Override
 	public List<Student> getAllStudents() {
 		
@@ -202,6 +202,49 @@ public class StudentDaoImpl implements StudentDao{
 		}
 		
 		return false;
+	}
+
+	@Override
+	public Student getStudentByNameAndPassword(String username, String password) {
+		Student student = new Student();
+		Connection connection = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.checkOut();
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BY_NAME_AND_USERNAME);
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, password);
+			rs = preparedStatement.executeQuery();
+			if(rs.next()) {
+				
+				Faculty faculty = fdi.getFacultyById(rs.getInt("faculty_id"));
+				
+				student.setId(rs.getInt("id"));
+				student.setName(rs.getString("name"));
+				student.setSurname(rs.getString("surname"));
+				student.setUsername(rs.getString("username"));
+				student.setPassword(rs.getString("password"));
+				student.setMail(rs.getString("mail"));
+				student.setImage(rs.getBytes("image"));
+				student.setStudyProgram(rs.getString("studyProgram"));
+				student.setFaculty(faculty);
+				student.setDescription(rs.getString("description"));
+				student.setFacultyYear(rs.getInt("facultyYear"));
+				student.setLastTimeActive(rs.getDate("lastTimeActive"));	
+			}
+			else {
+				// no student for given id
+				student = null;
+			}	
+			
+			preparedStatement.close();
+			
+		} catch(SQLException sql) {
+			sql.printStackTrace();
+		} finally {
+			connectionPool.checkIn(connection);
+		}
+		return student;
 	}
 
 	

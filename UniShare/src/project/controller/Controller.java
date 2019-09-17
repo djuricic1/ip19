@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import beans.StudentBean;
 import daoimpl.StudentDaoImpl;
+import dto.Student;
 
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {
@@ -20,8 +22,7 @@ public class Controller extends HttpServlet {
 	
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
 		req.setCharacterEncoding("UTF-8");
 		String address = "/WEB-INF/pages/login.jsp";
 		String action = req.getParameter("action");
@@ -35,6 +36,31 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("login")) {
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
+			StudentBean studentBean = new StudentBean();
+			if(studentBean.login(username, password)) {
+				session.setAttribute("studentBean", studentBean);
+				address = "/WEB-INF/pages/updateProfile.jsp";
+			}
+		} else if (action.equals("registration")) {
+			String name = req.getParameter("name");
+			String surname = req.getParameter("surname");
+			String password = req.getParameter("password");
+			String username = req.getParameter("username");
+			String mail = req.getParameter("mail");
+			StudentBean studentBean = new StudentBean();
+			Student student = new Student(); 
+			student.setName(name);
+			student.setSurname(surname);
+			student.setPassword(password);
+			student.setUsername(username);
+			student.setMail(mail);
+			if(studentBean.add(student)) {
+				session.setAttribute("studentBean", studentBean);
+				address = "/WEB-INF/pages/updateProfile.jsp";
+			}
+			else {
+				address = "/WEB-INF/pages/registration.jsp";
+			}
 		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);

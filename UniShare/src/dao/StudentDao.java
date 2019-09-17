@@ -11,4 +11,5 @@ public interface StudentDao {
 	boolean insertStudent(Student student);
 	boolean updateStudent(Student student);
 	boolean updateStudentLastTimeActive(Student student);
+	Student getStudentByNameAndPassword(String username, String password);
 }
