@@ -8,4 +8,5 @@ public interface FacultyDao {
 
 	Faculty getFacultyById(int id);
 	List<Faculty> getAllFaculties();
+	Faculty getFacultyByName(String facultyName);
 }

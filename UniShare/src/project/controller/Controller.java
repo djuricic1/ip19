@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.StudentBean;
+import daoimpl.FacultyDaoImpl;
 import daoimpl.StudentDaoImpl;
+import dto.Faculty;
 import dto.Student;
 
 @WebServlet("/Controller")
@@ -19,7 +21,7 @@ public class Controller extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private StudentDaoImpl sdi = new StudentDaoImpl();
-	
+	private FacultyDaoImpl fdi = new FacultyDaoImpl();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
@@ -55,7 +57,7 @@ public class Controller extends HttpServlet {
 			student.setPassword(password);
 			student.setUsername(username);
 			student.setMail(mail);
-			studentBean.setUser(student);
+			studentBean.setStudent(student);
 			if(studentBean.add(student)) {
 				session.setAttribute("studentBean", studentBean);
 				address = "/WEB-INF/pages/updateProfile.jsp";
@@ -63,6 +65,32 @@ public class Controller extends HttpServlet {
 			else {
 				address = "/registration.jsp";
 			}
+		} else if (action.equals("update")) {
+			Faculty faculty = fdi.getFacultyByName(req.getParameter("faculty"));
+			
+			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+			studentBean.getStudent().setName(req.getParameter("name"));
+			studentBean.getStudent().setSurname(req.getParameter("surname"));
+			studentBean.getStudent().setPassword(req.getParameter("password"));
+			studentBean.getStudent().setDescription(req.getParameter("description"));
+			studentBean.getStudent().setStudyProgram(req.getParameter("studyProgram"));
+			studentBean.getStudent().setFaculty(faculty);
+			studentBean.getStudent().setFacultyYear(Integer.parseInt(req.getParameter("facultyYear")));
+			
+			// TODO: ADD IMAGE SAVING IN DATABASE 
+			
+			if(studentBean.update()) {
+				
+				System.out.println("SUCCESS");
+			}
+			else {
+				System.out.println("UNSUCCESS");
+			}
+					
+			//System.out.println(test);
+			
+		} else if (action.equals("main")) {
+			
 		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);

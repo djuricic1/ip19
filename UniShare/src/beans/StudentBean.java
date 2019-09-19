@@ -29,16 +29,20 @@ public class StudentBean implements Serializable {
 		isLoggedIn = false;
 	}
 
-	public Student getUser() {
+	public Student getStudent() {
 		return student;
 	}
 	
-	public void setUser(Student student) {
+	public void setStudent(Student student) {
 		this.student = student;
 	}
 	
 	public boolean add(Student student) {
 		return sdi.insertStudent(student);
+	}
+	
+	public boolean update() {
+		return sdi.updateStudent(student);
 	}
 	
 }

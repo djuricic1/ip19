@@ -12,4 +12,9 @@ public interface StudentDao {
 	boolean updateStudent(Student student);
 	boolean updateStudentLastTimeActive(Student student);
 	Student getStudentByNameAndPassword(String username, String password);
+	List<Student> getAllStudentsConnected(Student student);
+	List<Student> getAllStudentRequests(Student student);
+	List<Student> getAllStudentsByFacultyId(int facultyId);
+	
+	
 }
