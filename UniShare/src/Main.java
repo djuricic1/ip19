@@ -1,36 +1,36 @@
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import daoimpl.FacultyDaoImpl;
-import daoimpl.PostDaoImpl;
-import daoimpl.StudentDaoImpl;
-import dto.Faculty;
-import dto.Post;
-import dto.Student;
+import daoimpl.BlogDaoImpl;
+import dto.Blog;
+import dto.Comment;
 
 public class Main {
 
 	public static void main(String[] args) {
-		FacultyDaoImpl fdi = new FacultyDaoImpl();
-		//Faculty f = fdi.getFacultyById(1);
-		PostDaoImpl pdi = new PostDaoImpl();
-		Faculty f = fdi.getFacultyById(1);
-		System.out.println(f.getName());
-		StudentDaoImpl sdi = new StudentDaoImpl();
 	
-		Student s2 = sdi.getAllStudents().get(0);
-		//s2.setLastTimeActive(new Date(System.currentTimeMillis()));
-		sdi.updateStudentLastTimeActive(s2);	
-	
-		Post post = new Post();
-		post.setDatePosted(new java.sql.Timestamp(System.currentTimeMillis()));
-		post.setNumberOfDislikes(0);
-		post.setNumberOfLikes(0);
-		post.setStudent(s2);
-		post.setDescription("Test opisa");
+		/*
+		 * BlogDaoImpl bdi = new BlogDaoImpl();
+		 * 
+		 * Blog blog = new Blog(); blog.setDateCreated(new
+		 * Date(System.currentTimeMillis())); blog.setTitle("Test 2");
+		 * blog.setContent("Test content"); Comment com1 = new Comment();
+		 * com1.setContent("Comment 1"); com1.setStudentId(1); Comment com2 = new
+		 * Comment(); com2.setContent("Comment 2"); com2.setStudentId(2);
+		 * 
+		 * 
+		 * List<Comment> comments = new ArrayList(); comments.add(com1);
+		 * comments.add(com2);
+		 * 
+		 * blog.setComments(comments);
+		 * 
+		 * bdi.insertBlog(blog);
+		 */
 		
-		pdi.insertPost(post);
-		
-		//System.out.println(new Date().getTime()); 
+		BlogDaoImpl bdi = new BlogDaoImpl();
+		List<Blog> result = bdi.getAllBlogs();
+		System.out.println(result.get(0).getComments().get(0).getContent());
 		
 	}
 
