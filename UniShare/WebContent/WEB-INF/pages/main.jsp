@@ -13,7 +13,6 @@
   		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   		<script src="js/script.js"></script>
 		<title>UniShare Login</title>
-		<link href="styles/style.css" type="text/css" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -58,7 +57,7 @@
                 		<form action="javascript:addPost();" id="new-post-form" style="width:100%">
                 			<div class="form-group" >
                 				<label for="post">Write something:</label>
-                				<textarea class="form-control" id="post" rows="4" ></textarea>
+                				<textarea class="form-control is-valid" id="post" rows="4" ></textarea>
                 			</div>
                 			<button type="submit" class="btn btn-primary" >Create post</button>
                 		</form>

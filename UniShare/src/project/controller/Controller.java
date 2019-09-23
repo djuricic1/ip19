@@ -1,6 +1,9 @@
 package project.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,10 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import beans.StudentBean;
 import daoimpl.FacultyDaoImpl;
+import daoimpl.PostDaoImpl;
 import daoimpl.StudentDaoImpl;
 import dto.Faculty;
+import dto.Post;
 import dto.Student;
 
 @WebServlet("/Controller")
@@ -29,7 +36,7 @@ public class Controller extends HttpServlet {
 		String address = "/login.jsp";
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
-
+		
 		if (action == null || action.equals("")) {
 			address = "/login.jsp";
 		} else if (action.equals("logout")) {
@@ -91,7 +98,31 @@ public class Controller extends HttpServlet {
 			
 		} else if (action.equals("main")) {
 			
+		} else if (action.equals("post")) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			String json = "";
+			if(br != null){
+				json = br.readLine();
+				System.out.println(json);
+			}
+			
+			JSONObject obj = new JSONObject(json);
+			int studentId = Integer.parseInt(obj.getString("studentId"));
+			long dateCreated = obj.getLong("dateCreated");
+			String description = obj.getString("description");
+			
+			Post post = new Post();
+			post.setDescription(description);
+			post.setNumberOfLikes(0);
+			post.setNumberOfDislikes(0);
+			post.setStudentId(studentId);
+			post.setDatePosted(new Date(dateCreated));
+			PostDaoImpl pdi = new PostDaoImpl();
+			pdi.insertPost(post);
+			
+			return;	
 		}
+		
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);
 		dispatcher.forward(req, resp);
@@ -101,6 +132,7 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doGet(req, resp);
 	}
+	
 	
 	
 }
