@@ -6,7 +6,7 @@ public class Post {
 	private int id;
 	private int numberOfLikes;
 	private int numberOfDislikes;
-	private Student student;
+	private int studentId;
 	private Date datePosted;
 	private String description;
 	
@@ -40,11 +40,11 @@ public class Post {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Student getStudent() {
-		return student;
+	public int getStudentId() {
+		return studentId;
 	}
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
 	
 }

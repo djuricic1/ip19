@@ -42,7 +42,7 @@ public class Controller extends HttpServlet {
 			System.out.println(username + " " + password);
 			if(studentBean.login(username, password)) {
 				session.setAttribute("studentBean", studentBean);
-				address = "/WEB-INF/pages/updateProfile.jsp";
+				address = "/WEB-INF/pages/main.jsp";
 			}
 		} else if (action.equals("registration")) {
 			String name = req.getParameter("name");

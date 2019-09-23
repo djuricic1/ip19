@@ -35,9 +35,8 @@ public class PostDaoImpl implements PostDao{
 				p.setDatePosted(rs.getDate("datePosted"));
 				p.setDescription(rs.getString("description"));
 				p.setNumberOfLikes(rs.getInt("numberOfLikes"));
-				p.setNumberOfDislikes(rs.getInt("numberOfDislikes"));
-				// not sure if we need this yet
-				// p.setStudent(sdi.getStudentyById(studentId)); 
+				p.setNumberOfDislikes(rs.getInt("numberOfDislikes"));				
+				p.setStudentId(studentId); 
 				posts.add(p);
 			}
 			pstmt.close();
@@ -62,9 +61,9 @@ public class PostDaoImpl implements PostDao{
 	
 			preparedStmt.setInt(1, post.getNumberOfLikes());
 			preparedStmt.setInt(2, post.getNumberOfDislikes());
-			preparedStmt.setInt(3, post.getStudent().getId());
+			preparedStmt.setInt(3, post.getStudentId());
 			preparedStmt.setTimestamp(4,  new java.sql.Timestamp(post.getDatePosted().getTime()));
-			preparedStmt.setString(5, post.getDescription());
+			preparedStmt.setString(5, post.getDescription());	
 			
 			preparedStmt.execute();
 			

@@ -1,7 +1,9 @@
-<%@page import="beans.StudentBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="beans.StudentBean"%>
 
+
+ 
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,7 +20,7 @@
 	<body>
 	
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand" href="#">Navbar</a>
+			<a class="navbar-brand" href="#">UniShare</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 			  <span class="navbar-toggler-icon"></span>
 			</button>
@@ -28,16 +30,16 @@
 				  <a class="nav-link" href="#">Sign In</a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="#">Sign Up</a>
+				  <a class="nav-link" href="http://localhost:8080/UniShare/registration.jsp">Sign Up</a>
 				</li>
 				
 			  </ul>
 			</div>  
 		  </nav>
 
-		  <div class="container" style="margin-top: 90px">
+		  <div class="container-fluid" style="margin-top: 30px; padding:20px">
 		 	<div class="row">
-    			<div class="col-sm-6" >
+    			<div class="col-sm-4">
 					<form action="Controller?action=login" method="POST">
 					<div class="form-group">
 						<label for="username">Username:</label>
@@ -50,10 +52,7 @@
 					<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
-				<div class="col-sm-6">
-					<img src="https://www.acronis.com/sites/default/public_files/styles/product_top_image/public/product_image/acronis_files_advanced_logo_dark%20%281%29.png?itok=FdI8RLq-" class="mx-auto d-block">
-					
-				</div>
+				
 			</div>
 		  </div>
 
