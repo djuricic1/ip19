@@ -1,6 +1,8 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import daoimpl.PostDaoImpl;
@@ -50,13 +52,28 @@ public class StudentBean implements Serializable {
 		return sdi.updateStudent(student);
 	}
 	
+	// returns all posts that user needs to see
 	public List<Post> getAllPosts() {		
-		return pdi.getAllByStudentId(student.getId());
+		List<Post> posts =  pdi.getAllByStudentId(student.getId());		
+		List<Student> studentsConnected = sdi.getAllStudentsConnected(student);
+		for(Student s : studentsConnected) {
+			posts.addAll(pdi.getAllByStudentId(s.getId()));
+		}
+	
+		Collections.sort(posts, (p1, p2) -> (p2.getNumberOfLikes() - p2.getNumberOfDislikes()) - (p1.getNumberOfLikes() - p1.getNumberOfDislikes()));
+		List<Post> firstFive = posts.subList(0, 5);
+		List<Post> dateSorted = posts.subList(5, posts.size());
+		Collections.sort(dateSorted, (p1, p2) -> p1.getDatePosted().after(p2.getDatePosted()) ? -1 : 1);
+		firstFive.addAll(dateSorted);
+		return firstFive;
+		
 	}
 	
 	public List<Student> getAllStudentConnected(){
 		return sdi.getAllStudentsConnected(student);
 	}
 	
-	
+	public Student getStudentById(int studentID) {
+		return sdi.getStudentyById(studentID);
+	}
 }

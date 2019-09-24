@@ -9,6 +9,8 @@ public class Post {
 	private int studentId;
 	private Date datePosted;
 	private String description;
+	private String typeOfPost;
+	private String linkPost;
 	
 	public int getId() {
 		return id;
@@ -46,5 +48,18 @@ public class Post {
 	public void setStudentId(int studentId) {
 		this.studentId = studentId;
 	}
+	public String getTypeOfPost() {
+		return typeOfPost;
+	}
+	public void setTypeOfPost(String typeOfPost) {
+		this.typeOfPost = typeOfPost;
+	}
+	public String getLinkPost() {
+		return linkPost;
+	}
+	public void setLinkPost(String linkPost) {
+		this.linkPost = linkPost;
+	}
+	
 	
 }

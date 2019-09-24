@@ -17,9 +17,11 @@ import org.json.JSONObject;
 
 import beans.StudentBean;
 import daoimpl.FacultyDaoImpl;
+import daoimpl.LikeDaoImpl;
 import daoimpl.PostDaoImpl;
 import daoimpl.StudentDaoImpl;
 import dto.Faculty;
+import dto.Like;
 import dto.Post;
 import dto.Student;
 
@@ -29,6 +31,8 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private StudentDaoImpl sdi = new StudentDaoImpl();
 	private FacultyDaoImpl fdi = new FacultyDaoImpl();
+	private PostDaoImpl pdi = new PostDaoImpl();
+	private LikeDaoImpl ldi = new LikeDaoImpl();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
@@ -96,6 +100,39 @@ public class Controller extends HttpServlet {
 					
 			//System.out.println(test);
 			
+		} else if (action.equals("like")) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			String json = "";
+			if(br != null){
+				json = br.readLine();
+				System.out.println(json);
+			}
+			
+			JSONObject obj = new JSONObject(json);
+			int postId = obj.getInt("postId");
+			int rate  = obj.getInt("rate");
+			int studentId = ((StudentBean)session.getAttribute("studentBean")).getStudent().getId();
+			
+			Post post = pdi.getById(postId);
+			Like like = new Like();
+			like.setStudentId(studentId);
+			like.setPostId(postId);
+			
+			if(rate == 0) {					
+				post.setNumberOfLikes(post.getNumberOfLikes() + 1);
+				like.setType(0);
+			}
+			else {
+				post.setNumberOfDislikes(post.getNumberOfDislikes() + 1);
+				like.setType(1);
+			}
+			if(ldi.insertLike(like)) {
+				pdi.updatePostRate(post);
+			}else {
+				resp.setStatus(204);
+			}
+			return;
+			
 		} else if (action.equals("main")) {
 			
 		} else if (action.equals("post")) {
@@ -110,6 +147,9 @@ public class Controller extends HttpServlet {
 			int studentId = Integer.parseInt(obj.getString("studentId"));
 			long dateCreated = obj.getLong("dateCreated");
 			String description = obj.getString("description");
+			String linkPost = obj.getString("linkPostText");
+			
+			
 			
 			Post post = new Post();
 			post.setDescription(description);
@@ -117,8 +157,26 @@ public class Controller extends HttpServlet {
 			post.setNumberOfDislikes(0);
 			post.setStudentId(studentId);
 			post.setDatePosted(new Date(dateCreated));
+			
+			String typeOfPost = "0";
+			if(linkPost.equals(""))
+				typeOfPost = "0";
+			else if(linkPost.contains("youtube.com")) {
+				typeOfPost = "2";
+				linkPost = linkPost.replace("watch?v=", "embed/");
+				System.out.println(linkPost);
+			}
+			else {
+				typeOfPost = "1";
+			}
+			
+			post.setTypeOfPost(typeOfPost);
+			post.setLinkPost(linkPost);
+			
+			
 			PostDaoImpl pdi = new PostDaoImpl();
 			pdi.insertPost(post);
+			
 			
 			return;	
 		}

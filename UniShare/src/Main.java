@@ -28,10 +28,10 @@ public class Main {
 		 * bdi.insertBlog(blog);
 		 */
 		
-		BlogDaoImpl bdi = new BlogDaoImpl();
-		List<Blog> result = bdi.getAllBlogs();
-		System.out.println(result.get(0).getComments().get(0).getContent());
-		
+		//BlogDaoImpl bdi = new BlogDaoImpl();
+		//List<Blog> result = bdi.getAllBlogs();
+		//System.out.println(result.get(0).getComments().get(0).getContent());
+		System.out.println("https://www.youtube.com/watch?v=ce24W6jM4gI".replaceAll("watch?v", "embed/"));
 	}
 
 }

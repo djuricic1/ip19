@@ -8,6 +8,7 @@ public interface PostDao {
 	
 	List<Post> getAllByStudentId(int studentId);
 	boolean insertPost(Post post);	
-	
+	boolean updatePostRate(Post post);
+	Post getById(int postId);
 	
 }
