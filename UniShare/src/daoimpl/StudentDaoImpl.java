@@ -21,7 +21,7 @@ public class StudentDaoImpl implements StudentDao{
 	private static final String SQL_SELECT_ALL = "SELECT * FROM student";
 	private static final String SQL_SELECT_BY_ID = "SELECT * FROM student WHERE student.id=?";
 	private static final String SQL_INSERT = "INSERT INTO `mydb`.`student` (`name`, `surname`, `username`, `password`, `mail`) VALUES (?, ?, ?, ?, ?)";
-	private static final String SQL_UPDATE = "UPDATE `mydb`.`student` SET `name` = ?, `surname` = ?, `username` = ?, `password` = ?, `mail` = ?, `description` = ?, `studyProgram` = ?, `facultyYear` = ?, `faculty_id` = ?,  `lastTimeActive` = ? WHERE (`id` = ?)";
+	private static final String SQL_UPDATE = "UPDATE `mydb`.`student` SET `name` = ?, `surname` = ?, `username` = ?, `password` = ?, `mail` = ?, `description` = ?, `studyProgram` = ?, `facultyYear` = ?, `faculty_id` = ?,  `lastTimeActive` = ?, image=? WHERE (`id` = ?)";
 	private static final String SQL_UPDATE_TIME_ACTIVE = "UPDATE student SET lastTimeActive=? WHERE id=?";
 	private static final String SQL_SELECT_BY_NAME_AND_USERNAME = "SELECT * FROM student where student.username=? AND student.password=?";
 	private static final String SQL_GET_ALL_CONNECTED_STUDENTS  = "(SELECT id from student join connection on id=student_id1 where student_id = ? and typeOfConnection=? ) union (SELECT id from student join connection on id=student_id where student_id1 = ? and typeOfConnection=?)";
@@ -50,7 +50,7 @@ public class StudentDaoImpl implements StudentDao{
 				student.setUsername(rs.getString("username"));
 				student.setPassword(rs.getString("password"));
 				student.setMail(rs.getString("mail"));
-				student.setImage(rs.getBytes("image"));
+				student.setImage(rs.getString("image"));
 				student.setStudyProgram(rs.getString("studyProgram"));
 				student.setFaculty(faculty);
 				student.setDescription(rs.getString("description"));
@@ -88,7 +88,7 @@ public class StudentDaoImpl implements StudentDao{
 				student.setUsername(rs.getString("username"));
 				student.setPassword(rs.getString("password"));
 				student.setMail(rs.getString("mail"));
-				student.setImage(rs.getBytes("image"));
+				student.setImage(rs.getString("image"));
 				student.setStudyProgram(rs.getString("studyProgram"));
 				student.setFaculty(faculty);
 				student.setDescription(rs.getString("description"));
@@ -166,7 +166,9 @@ public class StudentDaoImpl implements StudentDao{
 			else 
 				preparedStatement.setTimestamp(10, new java.sql.Timestamp(new Date(System.currentTimeMillis()).getTime()));
 			
-			preparedStatement.setInt(11, student.getId());
+			preparedStatement.setString(11, student.getImage());
+			
+			preparedStatement.setInt(12, student.getId());
 			
 			preparedStatement.executeUpdate();
 			
@@ -231,7 +233,7 @@ public class StudentDaoImpl implements StudentDao{
 				student.setUsername(rs.getString("username"));
 				student.setPassword(rs.getString("password"));
 				student.setMail(rs.getString("mail"));
-				student.setImage(rs.getBytes("image"));
+				student.setImage(rs.getString("image"));
 				student.setStudyProgram(rs.getString("studyProgram"));
 				student.setFaculty(faculty);
 				student.setDescription(rs.getString("description"));
@@ -330,7 +332,7 @@ public class StudentDaoImpl implements StudentDao{
 				student.setUsername(rs.getString("username"));
 				student.setPassword(rs.getString("password"));
 				student.setMail(rs.getString("mail"));
-				student.setImage(rs.getBytes("image"));
+				student.setImage(rs.getString("image"));
 				student.setStudyProgram(rs.getString("studyProgram"));
 				student.setFaculty(faculty);
 				student.setDescription(rs.getString("description"));

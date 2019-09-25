@@ -1,18 +1,25 @@
 package project.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
+import org.apache.tomcat.util.http.fileupload.UploadContext;
 import org.json.JSONObject;
 
 import beans.StudentBean;
@@ -26,6 +33,7 @@ import dto.Post;
 import dto.Student;
 
 @WebServlet("/Controller")
+@MultipartConfig
 public class Controller extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -33,7 +41,7 @@ public class Controller extends HttpServlet {
 	private FacultyDaoImpl fdi = new FacultyDaoImpl();
 	private PostDaoImpl pdi = new PostDaoImpl();
 	private LikeDaoImpl ldi = new LikeDaoImpl();
-	
+	private String UPLOAD_DIRECTORY = "/assets/img/userImg";
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
 		req.setCharacterEncoding("UTF-8");
@@ -41,8 +49,21 @@ public class Controller extends HttpServlet {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 		
+		
+		
 		if (action == null || action.equals("")) {
+			// check this later
+			if(session.getAttribute("studentBean")!=null) {
+				address = "/WEB-INF/pages/main.jsp";
+			}
+			else {
+				address = "/login.jsp";
+			}
+		} else if (action.equals("logout")) {
 			address = "/login.jsp";
+			session.invalidate();
+		} else if (action.equals("toUpdate")) {
+			address = "/WEB-INF/pages/updateProfile.jsp";
 		} else if (action.equals("logout")) {
 			session.invalidate();
 			address = "/login.jsp";
@@ -77,6 +98,7 @@ public class Controller extends HttpServlet {
 				address = "/registration.jsp";
 			}
 		} else if (action.equals("update")) {
+			
 			Faculty faculty = fdi.getFacultyByName(req.getParameter("faculty"));
 			
 			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
@@ -87,17 +109,30 @@ public class Controller extends HttpServlet {
 			studentBean.getStudent().setStudyProgram(req.getParameter("studyProgram"));
 			studentBean.getStudent().setFaculty(faculty);
 			studentBean.getStudent().setFacultyYear(Integer.parseInt(req.getParameter("facultyYear")));
+
 			
-			// TODO: ADD IMAGE SAVING IN DATABASE 
+			// file saving 
+			Part filePart = req.getPart("file");
+			InputStream fileContent = filePart.getInputStream();
+			
+			byte[] buffer = new byte[fileContent.available()];
+			fileContent.read(buffer);
+			// TODO: CHANGE THIS SHIT 
+			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\assets\\img\\userImg\\" + filePart.getSubmittedFileName();
+			File targetFile = new File(uploadPath);
+			
+			OutputStream outStream = new FileOutputStream(targetFile);
+			outStream.write(buffer);
+			address = "/WEB-INF/pages/updateProfile.jsp";
+			studentBean.getStudent().setImage(uploadPath);
 			
 			if(studentBean.update()) {
-				
 				System.out.println("SUCCESS");
 			}
 			else {
 				System.out.println("UNSUCCESS");
 			}
-					
+			
 			//System.out.println(test);
 			
 		} else if (action.equals("like")) {
@@ -136,18 +171,13 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("main")) {
 			
 		} else if (action.equals("post")) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-			String json = "";
-			if(br != null){
-				json = br.readLine();
-				System.out.println(json);
-			}
 			
-			JSONObject obj = new JSONObject(json);
-			int studentId = Integer.parseInt(obj.getString("studentId"));
-			long dateCreated = obj.getLong("dateCreated");
-			String description = obj.getString("description");
-			String linkPost = obj.getString("linkPostText");
+		
+			
+			int studentId = Integer.parseInt(req.getParameter("studentId"));
+			long dateCreated = Long.parseLong(req.getParameter("dateCreated"));
+			String description = req.getParameter("description");
+			String linkPost = req.getParameter("linkPostText");
 			
 			
 			

@@ -12,7 +12,7 @@ public class Student {
 	private String mail;
 	private Faculty faculty;
 	private String description;
-	private byte[] image;
+	private String image;
 	private String studyProgram;
 	private int facultyYear;
 	private Date lastTimeActive;
@@ -59,10 +59,10 @@ public class Student {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public byte[] getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(byte[] image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public String getStudyProgram() {
