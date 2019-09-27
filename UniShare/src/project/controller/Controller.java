@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import beans.StudentBean;
 import daoimpl.BlogDaoImpl;
+import daoimpl.ConnectionDaoImpl;
 import daoimpl.FacultyDaoImpl;
 import daoimpl.FileDaoImpl;
 import daoimpl.LikeDaoImpl;
@@ -46,6 +47,7 @@ public class Controller extends HttpServlet {
 	private LikeDaoImpl ldi = new LikeDaoImpl();
 	private FileDaoImpl fileDaoImpl = new FileDaoImpl();
 	private BlogDaoImpl bdi = new BlogDaoImpl();
+	private ConnectionDaoImpl cdi = new ConnectionDaoImpl();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
@@ -262,6 +264,19 @@ public class Controller extends HttpServlet {
 			address = "/WEB-INF/pages/main.jsp";
 		} else if(action.equals("connections")) {
 			address = "/WEB-INF/pages/connection.jsp";
+		} else if(action.equals("addConnection")) {
+			address = "/WEB-INF/pages/connection.jsp";
+			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			String json = "";
+			if(br != null){
+				json = br.readLine();
+				System.out.println(json);
+			}
+			
+			JSONObject obj = new JSONObject(json);
+			int senderId = obj.getInt("senderId");
+			int recieverId  = obj.getInt("recieverId");
+			cdi.insertConnection(senderId, recieverId, 1);
 		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);

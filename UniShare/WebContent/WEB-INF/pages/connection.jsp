@@ -54,11 +54,11 @@
 	      				</div>
 	      				<% if(connectedStudents.contains(student)) { %>
 		      				<div class="col-sm-6" style="margin-top:5px">
-		      					<button type="button" class="btn btn-primary" onclick="deleteConnection(<%=student.getId()%>)"> Delete connection </button>
+		      					<button type="button" id="btn-del-<%=student.getId()%>" class="btn btn-primary" onclick="deleteConnection(<%=student.getId()%>)"> Delete connection </button>
 		      				</div>
 	      				<%} else {%>
 	      						<div class="col-sm-6" style="margin-top:5px">
-		      					<button type="button" class="btn btn-primary" onclick="addConnection(<%=student.getId()%>)"> Add connection </button>
+		      					<button type="button" id="btn-sr-<%=student.getId()%>" class="btn btn-primary" onclick="addConnection(<%=student.getId()%>)"> Add connection </button>
 		      				</div>
 	      				<%} %>
 	      			</div>
