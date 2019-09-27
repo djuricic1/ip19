@@ -3,8 +3,8 @@ package dto;
 public class File {
 	private int id;
 	private String description;
-	private byte[] file;
-	private Student student;
+	private String path;
+	private int studentId;
 	
 	public int getId() {
 		return id;
@@ -18,17 +18,17 @@ public class File {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public byte[] getFile() {
-		return file;
+
+	public int getStudentId() {
+		return studentId;
 	}
-	public void setFile(byte[] file) {
-		this.file = file;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
-	public Student getStudent() {
-		return student;
+	public String getPath() {
+		return path;
 	}
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setPath(String path) {
+		this.path = path;
 	}
-	
 }

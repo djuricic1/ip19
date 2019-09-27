@@ -23,10 +23,13 @@ import org.apache.tomcat.util.http.fileupload.UploadContext;
 import org.json.JSONObject;
 
 import beans.StudentBean;
+import daoimpl.BlogDaoImpl;
 import daoimpl.FacultyDaoImpl;
+import daoimpl.FileDaoImpl;
 import daoimpl.LikeDaoImpl;
 import daoimpl.PostDaoImpl;
 import daoimpl.StudentDaoImpl;
+import dto.Blog;
 import dto.Faculty;
 import dto.Like;
 import dto.Post;
@@ -41,7 +44,9 @@ public class Controller extends HttpServlet {
 	private FacultyDaoImpl fdi = new FacultyDaoImpl();
 	private PostDaoImpl pdi = new PostDaoImpl();
 	private LikeDaoImpl ldi = new LikeDaoImpl();
-	private String UPLOAD_DIRECTORY = "/assets/img/userImg";
+	private FileDaoImpl fileDaoImpl = new FileDaoImpl();
+	private BlogDaoImpl bdi = new BlogDaoImpl();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
 		req.setCharacterEncoding("UTF-8");
@@ -49,7 +54,7 @@ public class Controller extends HttpServlet {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 		
-		
+		//System.out.println(action);
 		
 		if (action == null || action.equals("")) {
 			// check this later
@@ -71,7 +76,7 @@ public class Controller extends HttpServlet {
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
 			StudentBean studentBean = new StudentBean();
-			System.out.println(username + " " + password);
+			
 			if(studentBean.login(username, password)) {
 				session.setAttribute("studentBean", studentBean);
 				address = "/WEB-INF/pages/main.jsp";
@@ -118,13 +123,13 @@ public class Controller extends HttpServlet {
 			byte[] buffer = new byte[fileContent.available()];
 			fileContent.read(buffer);
 			// TODO: CHANGE THIS SHIT 
-			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\assets\\img\\userImg\\" + filePart.getSubmittedFileName();
+			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\img\\userImg\\" + filePart.getSubmittedFileName();
 			File targetFile = new File(uploadPath);
 			
 			OutputStream outStream = new FileOutputStream(targetFile);
 			outStream.write(buffer);
 			address = "/WEB-INF/pages/updateProfile.jsp";
-			studentBean.getStudent().setImage(uploadPath);
+			studentBean.getStudent().setImage("/assets/img/userImg/" + filePart.getSubmittedFileName());
 			
 			if(studentBean.update()) {
 				System.out.println("SUCCESS");
@@ -171,15 +176,10 @@ public class Controller extends HttpServlet {
 		} else if (action.equals("main")) {
 			
 		} else if (action.equals("post")) {
-			
-		
-			
 			int studentId = Integer.parseInt(req.getParameter("studentId"));
 			long dateCreated = Long.parseLong(req.getParameter("dateCreated"));
 			String description = req.getParameter("description");
 			String linkPost = req.getParameter("linkPostText");
-			
-			
 			
 			Post post = new Post();
 			post.setDescription(description);
@@ -209,8 +209,60 @@ public class Controller extends HttpServlet {
 			
 			
 			return;	
+		} else if (action.equals("addFile")) {
+			System.out.println("TEST");
+			
+			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+			int studentId = studentBean.getStudent().getId();
+			String description = req.getParameter("description");
+			
+			// file saving 
+			Part filePart = req.getPart("file");
+			InputStream fileContent = filePart.getInputStream();
+			
+			byte[] buffer = new byte[fileContent.available()];
+			fileContent.read(buffer);
+			// TODO: CHANGE THIS SHIT 
+			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\files\\" + filePart.getSubmittedFileName();
+			File targetFile = new File(uploadPath);
+			
+			OutputStream outStream = new FileOutputStream(targetFile);
+			outStream.write(buffer);
+			
+			dto.File file = new dto.File();
+			file.setDescription(description);
+			file.setPath("/assets/img/userImg/" + filePart.getSubmittedFileName());
+			file.setStudentId(studentId);
+			
+			fileDaoImpl.insertFile(file);
+			address = "/WEB-INF/pages/main.jsp";
+		} else if (action.equals("addBlog")) {
+			
+			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+			int studentId = studentBean.getStudent().getId();
+			String title = req.getParameter("title");
+			String blogDescription = req.getParameter("blogDescription");
+			
+			Blog blog = new Blog();
+			
+			blog.setDateCreated(new Date(System.currentTimeMillis()));
+			blog.setContent(blogDescription);
+			blog.setStudentId(studentId);
+			blog.setTitle(title);
+			
+			bdi.insertBlog(blog);
+			address = "/WEB-INF/pages/main.jsp";
+			
+			
+		} else if (action.equals("addComment")) {
+			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+			int studentId = studentBean.getStudent().getId();
+			String blogComment = req.getParameter("blogComment");
+			bdi.addComment(req.getParameter("blogId"), blogComment, studentId);
+			address = "/WEB-INF/pages/main.jsp";
+		} else if(action.equals("connections")) {
+			address = "/WEB-INF/pages/connection.jsp";
 		}
-		
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);
 		dispatcher.forward(req, resp);

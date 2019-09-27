@@ -1,15 +1,11 @@
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import daoimpl.BlogDaoImpl;
 import dto.Blog;
-import dto.Comment;
 
 public class Main {
 
 	public static void main(String[] args) {
-	
 		/*
 		 * BlogDaoImpl bdi = new BlogDaoImpl();
 		 * 
@@ -31,7 +27,8 @@ public class Main {
 		//BlogDaoImpl bdi = new BlogDaoImpl();
 		//List<Blog> result = bdi.getAllBlogs();
 		//System.out.println(result.get(0).getComments().get(0).getContent());
-		System.out.println("https://www.youtube.com/watch?v=ce24W6jM4gI".replaceAll("watch?v", "embed/"));
+		//System.out.println("https://www.youtube.com/watch?v=ce24W6jM4gI".replaceAll("watch?v", "embed/"));
+
 	}
 
 }

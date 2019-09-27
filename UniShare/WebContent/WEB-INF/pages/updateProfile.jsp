@@ -19,6 +19,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="js/script.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/update.js"></script>
 </head>
 <body>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -43,6 +44,22 @@
 		 	<div class="row">
     			<div class="col-sm-4" >
 				<form method="POST" action="Controller?action=update" enctype="multipart/form-data">
+					<% 
+						if(studentBean.getStudent().getImage() != null || !studentBean.getStudent().getImage().equals("")) {
+					%>	
+							<div class="form-group" id="imgContainer">
+					<%  } else { %>
+							<div class="form-group" id="imgContainer" style="display: none;"> <%} %>
+								<label for="img">Image:</label>
+								<img src="<%=request.getContextPath()%>\<%=studentBean.getStudent().getImage()%>" id="img" class="img-fluid">				
+							</div>
+					<%	
+						
+					%>
+					<div class="form-group">
+						<label for="file">Choose image:</label>
+						<input type="file" id="file" name="file" onchange="changeImage(this)"> 
+					</div>
 					<div class="form-group">
 						<label for="username">Name:</label>
 						<input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<%=studentBean.getStudent().getName()%>">
@@ -92,10 +109,7 @@
 							<option value="4"> 4th Year </option>
 						</select> 
 					</div>
-					<div class="form-group">
-						<label for="img">Choose image </label>
-						<input type="file" id="file" name="file"> 
-					</div>
+					
 					<div class="form-group">
 						<label for="description">Description:</label>
 						<textarea class="form-control" id="description" name="description" rows="10" cols="30" value="<%=studentBean.getStudent().getDescription()%>"> </textarea>

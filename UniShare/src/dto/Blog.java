@@ -6,19 +6,14 @@ import java.util.List;
 
 public class Blog {
 	
-	private int id;
+	private String id;
 	private int studentId;
 	private String title;
 	private String content;
 	private Date dateCreated;
 	private List<Comment> comments = new ArrayList<>();
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -49,6 +44,12 @@ public class Blog {
 	}
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

@@ -1,13 +1,16 @@
 package beans;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import daoimpl.BlogDaoImpl;
+import daoimpl.FileDaoImpl;
 import daoimpl.PostDaoImpl;
 import daoimpl.StudentDaoImpl;
 import dto.Student;
+import dto.Blog;
+import dto.File;
 import dto.Post;
 
 
@@ -18,6 +21,8 @@ public class StudentBean implements Serializable {
 	private boolean isLoggedIn = false;
 	private StudentDaoImpl sdi = new StudentDaoImpl();
 	private PostDaoImpl pdi = new PostDaoImpl();
+	private FileDaoImpl fdi = new FileDaoImpl();
+	private BlogDaoImpl bdi = new BlogDaoImpl();
 	
 	public boolean login(String username, String password) {
 		if ((student = sdi.getStudentByNameAndPassword(username, password)) != null) {
@@ -70,10 +75,38 @@ public class StudentBean implements Serializable {
 	}
 	
 	public List<Student> getAllStudentConnected(){
-		return sdi.getAllStudentsConnected(student);
+		List<Student> ret = sdi.getAllStudentsConnected(student);
+		System.out.println(ret.get(0).getUsername());
+		System.out.println(ret.get(1).getUsername());
+		return ret;
 	}
 	
 	public Student getStudentById(int studentID) {
 		return sdi.getStudentyById(studentID);
+	}
+	
+	public List<File> getAllFiles() {
+		List<File> files = fdi.getAllFilesByStudentId(student.getId());
+		List<Student> studentsConnected = sdi.getAllStudentsConnected(student);
+		for(Student s : studentsConnected) {
+			files.addAll(fdi.getAllFilesByStudentId(s.getId()));
+		}
+		
+		Collections.sort(files, (f1, f2) -> f1.getId() - f2.getId());
+		
+		return files;
+	}
+	
+	public List<Blog> getAllBlogs() {
+		List<Blog> blogs = bdi.getAllBlogs();
+		return blogs;
+	}
+	
+	public List<Student> getAllByFacultyId(int facultyId) {
+		return sdi.getAllStudentsByFacultyId(facultyId);
+	}
+	
+	public List<Student> getAllConnectionRequests() {
+		return sdi.getAllStudentRequests(student);
 	}
 }

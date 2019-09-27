@@ -6,8 +6,8 @@ import dto.File;
 
 public interface FileDao {
 
-	List<File> getAllFilesByStudentId();
-		
+	List<File> getAllFilesByStudentId(int studentId);
+	boolean insertFile(File file);	
 	
 	
 }
