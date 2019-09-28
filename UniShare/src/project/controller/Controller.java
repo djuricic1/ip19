@@ -264,7 +264,7 @@ public class Controller extends HttpServlet {
 			address = "/WEB-INF/pages/main.jsp";
 		} else if(action.equals("connections")) {
 			address = "/WEB-INF/pages/connection.jsp";
-		} else if(action.equals("addConnection")) {
+		} else if(action.equals("sendConnectionRequest")) {
 			address = "/WEB-INF/pages/connection.jsp";
 			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 			String json = "";
@@ -276,7 +276,47 @@ public class Controller extends HttpServlet {
 			JSONObject obj = new JSONObject(json);
 			int senderId = obj.getInt("senderId");
 			int recieverId  = obj.getInt("recieverId");
-			cdi.insertConnection(senderId, recieverId, 1);
+			if(cdi.insertConnection(senderId, recieverId, 1))
+				resp.setStatus(200);
+			
+		} else if(action.equals("acceptConnectionRequest")) {
+			address = "/WEB-INF/pages/connection.jsp";
+			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			String json = "";
+			if(br != null){
+				json = br.readLine();
+				System.out.println(json);
+			}
+			
+			JSONObject obj = new JSONObject(json);
+			int senderId = obj.getInt("senderId");
+			int accepterId  = Integer.parseInt(obj.getString("accepterId"));
+			int accept = obj.getInt("accept");
+			
+			
+			
+			if(accept==1) {
+				cdi.acceptConnection(senderId, accepterId);
+			 }
+			else {
+				cdi.deleteConnection(senderId, accepterId);
+			}
+			resp.setStatus(200);
+		} else if(action.equals("deleteConnection")) {
+			address = "/WEB-INF/pages/connection.jsp";
+			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			String json = "";
+			if(br != null){
+				json = br.readLine();
+				System.out.println(json);
+			}
+			
+			JSONObject obj = new JSONObject(json);
+			int senderId = obj.getInt("senderId");
+			int accepterId  = obj.getInt("accepterId");
+			
+			if(!cdi.deleteConnection(senderId, accepterId))
+				cdi.deleteConnection(accepterId, senderId);
 		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);

@@ -15,6 +15,6 @@ public interface StudentDao {
 	List<Student> getAllStudentsConnected(Student student);
 	List<Student> getAllStudentRequests(Student student);
 	List<Student> getAllStudentsByFacultyId(int facultyId);
-	
+	//List<Student> getAllRequestSentByStudent(int studentId);
 	
 }

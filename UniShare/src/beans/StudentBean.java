@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import daoimpl.BlogDaoImpl;
+import daoimpl.ConnectionDaoImpl;
 import daoimpl.FileDaoImpl;
 import daoimpl.PostDaoImpl;
 import daoimpl.StudentDaoImpl;
@@ -23,6 +24,7 @@ public class StudentBean implements Serializable {
 	private PostDaoImpl pdi = new PostDaoImpl();
 	private FileDaoImpl fdi = new FileDaoImpl();
 	private BlogDaoImpl bdi = new BlogDaoImpl();
+	private ConnectionDaoImpl cdi = new ConnectionDaoImpl();
 	
 	public boolean login(String username, String password) {
 		if ((student = sdi.getStudentByNameAndPassword(username, password)) != null) {
@@ -64,20 +66,23 @@ public class StudentBean implements Serializable {
 		for(Student s : studentsConnected) {
 			posts.addAll(pdi.getAllByStudentId(s.getId()));
 		}
-	
-		Collections.sort(posts, (p1, p2) -> (p2.getNumberOfLikes() - p2.getNumberOfDislikes()) - (p1.getNumberOfLikes() - p1.getNumberOfDislikes()));
-		List<Post> firstFive = posts.subList(0, 5);
-		List<Post> dateSorted = posts.subList(5, posts.size());
-		Collections.sort(dateSorted, (p1, p2) -> p1.getDatePosted().after(p2.getDatePosted()) ? -1 : 1);
-		firstFive.addAll(dateSorted);
-		return firstFive;
+		if(posts.size() > 5) {
+			Collections.sort(posts, (p1, p2) -> (p2.getNumberOfLikes() - p2.getNumberOfDislikes()) - (p1.getNumberOfLikes() - p1.getNumberOfDislikes()));
+			List<Post> firstFive = posts.subList(0, 5);
+			List<Post> dateSorted = posts.subList(5, posts.size());
+			Collections.sort(dateSorted, (p1, p2) -> p1.getDatePosted().after(p2.getDatePosted()) ? -1 : 1);
+			firstFive.addAll(dateSorted);
+			
+			return firstFive;
+		} 
+		else return posts;
 		
 	}
 	
 	public List<Student> getAllStudentConnected(){
 		List<Student> ret = sdi.getAllStudentsConnected(student);
-		System.out.println(ret.get(0).getUsername());
-		System.out.println(ret.get(1).getUsername());
+		//System.out.println(ret.get(0).getUsername());
+		//System.out.println(ret.get(1).getUsername());
 		return ret;
 	}
 	
@@ -108,5 +113,9 @@ public class StudentBean implements Serializable {
 	
 	public List<Student> getAllConnectionRequests() {
 		return sdi.getAllStudentRequests(student);
+	}
+	
+	public List<Integer> getRequestsSent(int studentId) {
+		return cdi.getRequestsSent(studentId);
 	}
 }

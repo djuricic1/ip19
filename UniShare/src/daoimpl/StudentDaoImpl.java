@@ -26,6 +26,7 @@ public class StudentDaoImpl implements StudentDao{
 	private static final String SQL_SELECT_BY_NAME_AND_USERNAME = "SELECT * FROM student where student.username=? AND student.password=?";
 	private static final String SQL_GET_ALL_CONNECTED_STUDENTS  = "(SELECT id from student join connection on id=student_id1 where student_id = ? and typeOfConnection=? ) union (SELECT id from student join connection on id=student_id where student_id1 = ? and typeOfConnection=?)";
 	private static final String SQL_GET_ALL_STUDENT_REQUEST = "SELECT id from student join connection on id=student_id1 where student_id = ? and typeOfConnection=?";
+	private static final String SQL_GET_ALL_STUDENT_REQUESTS = "SELECT * FROM connection join student on student_id=id WHERE student_id1=? and typeOfConnection=1";
 	private static final String SQL_SELECT_ALL_BY_FACULTY_ID = "SELECT * FROM student where faculty_id=?";
 	
 	@Override
@@ -292,9 +293,8 @@ public class StudentDaoImpl implements StudentDao{
 		
 		try { 
 			connection = connectionPool.checkOut();
-			PreparedStatement pstmt = connection.prepareStatement(SQL_GET_ALL_STUDENT_REQUEST);
+			PreparedStatement pstmt = connection.prepareStatement(SQL_GET_ALL_STUDENT_REQUESTS);
 			pstmt.setInt(1, student.getId());
-			pstmt.setInt(2, 1);
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -351,4 +351,6 @@ public class StudentDaoImpl implements StudentDao{
 		} 
 		return students;
 	}
+	
+	
 }
