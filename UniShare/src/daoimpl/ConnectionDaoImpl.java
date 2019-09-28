@@ -134,6 +134,7 @@ public class ConnectionDaoImpl implements ConnectionDao {
 	
 	@Override
 	public boolean deleteConnection(int student_id, int student_id1) {
+		System.out.println(student_id + " " + student_id1);
 		Connection connection = null;
 		boolean isSuccessful = false;
 		
@@ -144,13 +145,14 @@ public class ConnectionDaoImpl implements ConnectionDao {
 			preparedStmt.setInt(1, student_id);
 			preparedStmt.setInt(2, student_id1);
 			
-			preparedStmt.execute();
+			preparedStmt.executeUpdate();
 			
 			preparedStmt.close();
 			
 			isSuccessful = true;
 			
 		} catch (SQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
 			return false;
 		} catch (SQLException e) {
 			
@@ -158,6 +160,7 @@ public class ConnectionDaoImpl implements ConnectionDao {
 		} finally {
 			connectionPool.checkIn(connection);
 		}
+		System.out.println(isSuccessful);
 		return isSuccessful;
 	}
 

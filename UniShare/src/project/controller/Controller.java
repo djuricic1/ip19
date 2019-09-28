@@ -315,8 +315,8 @@ public class Controller extends HttpServlet {
 			int senderId = obj.getInt("senderId");
 			int accepterId  = obj.getInt("accepterId");
 			
-			if(!cdi.deleteConnection(senderId, accepterId))
-				cdi.deleteConnection(accepterId, senderId);
+			cdi.deleteConnection(senderId, accepterId);
+			cdi.deleteConnection(accepterId, senderId);
 		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);

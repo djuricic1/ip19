@@ -65,7 +65,7 @@
 	
 	      				<%} else if(connectedStudents.contains(student)) {%>
 	      						<div class="col-sm-6" style="margin-top:5px">
-		      					<button type="button" class="btn btn-primary"> Connected </button>
+		      					<button type="button" class="btn btn-primary" id="btn-connect-<%=student.getId()%>"> Connected </button>
 		      				</div>
 	      				<%} else {%> 
 			

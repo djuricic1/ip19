@@ -81,6 +81,7 @@ public class StudentBean implements Serializable {
 	
 	public List<Student> getAllStudentConnected(){
 		List<Student> ret = sdi.getAllStudentsConnected(student);
+		ret.remove(student);
 		//System.out.println(ret.get(0).getUsername());
 		//System.out.println(ret.get(1).getUsername());
 		return ret;
@@ -108,11 +109,15 @@ public class StudentBean implements Serializable {
 	}
 	
 	public List<Student> getAllByFacultyId(int facultyId) {
-		return sdi.getAllStudentsByFacultyId(facultyId);
+		List<Student> ret = sdi.getAllStudentsByFacultyId(facultyId);
+		ret.remove(student);
+		return ret;
 	}
 	
 	public List<Student> getAllConnectionRequests() {
-		return sdi.getAllStudentRequests(student);
+		List<Student> temp = sdi.getAllStudentRequests(student);
+		temp.remove(student);
+		return temp;
 	}
 	
 	public List<Integer> getRequestsSent(int studentId) {

@@ -10,6 +10,7 @@ function requestConnection(id) {
         if((request.readyState == 4) && (request.status == 200)) {
             
             document.getElementById("btn-sr-" + id).disabled=true;
+            document.getElementById("btn-sr-" + id).innerHTML = "Request sent";
             //document.forms["new-post-form"].reset();
            // document.getElementById("postContainer").innerHTML = "TEST" +  document.getElementById("postContainer").innerHTML;
         }
@@ -42,7 +43,11 @@ function acceptConnectionRequest(id, accept) {
             chRC[1].children[0].setAttribute( "onclick", "deleteConnection(" + id +"," + object.accepterId +")");
             document.getElementById("request-" + id).style.display= 'none';
             document.getElementById("connected").appendChild(cln);
-           
+            if(accept == 1) {
+                document.getElementById("btn-connect-" + id).innerHTML = "Connected";
+                document.getElementById("btn-connect-" + id).setAttribute("onclick", "");
+                
+            }
         }
     };
 
@@ -63,6 +68,10 @@ function deleteConnection(id1, id2) {
     request.onreadystatechange = function() {
         if((request.readyState == 4) && (request.status == 200)) {       
             document.getElementById("connected-" + id1).style.display= 'none';           
+            document.getElementById("btn-connect-" + id1).innerHTML = "Add connection";
+            document.getElementById("btn-connect-" + id1).setAttribute("onclick", "requestConnection(" + id1 + ")");
+            document.getElementById("btn-connect-" + id1).id = "btn-sr-" + id1;
+           
         }
     };
 
