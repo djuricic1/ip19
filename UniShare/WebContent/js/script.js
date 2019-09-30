@@ -1,18 +1,13 @@
 
 
 function addPost() {
-    var object = {       
-        studentId: document.getElementById("custId").value,
-        dateCreated: new Date().getTime(),
-        description: document.forms["new-post-form"].elements.post.value,
-        linkPostText:  document.forms['new-post-form'].elements.postLink.value
-    }
+   
 
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
         if((request.readyState == 4) && (request.status == 200)) {
             document.forms["new-post-form"].reset();
-            document.getElementById("postContainer").innerHTML = "TEST" +  document.getElementById("postContainer").innerHTML;
+           // document.getElementById("postContainer").innerHTML = "TEST" +  document.getElementById("postContainer").innerHTML;
         }
     };
     request.open("POST", "Controller?action=post", true);

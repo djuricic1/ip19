@@ -4,7 +4,7 @@ function changeImage(el) {
 
         reader.onload = function (e) {
             $("#img").attr('src', e.target.result);
-            $("#imgContainer").style.display= 'block';
+           document.getElementById("imgContainer").style.display= 'block';
         };
 
         reader.readAsDataURL(el.files[0]);

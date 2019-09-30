@@ -51,12 +51,11 @@ public class Controller extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
+		
 		req.setCharacterEncoding("UTF-8");
 		String address = "/login.jsp";
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
-		
-		//System.out.println(action);
 		
 		if (action == null || action.equals("")) {
 			// check this later
@@ -75,35 +74,61 @@ public class Controller extends HttpServlet {
 			session.invalidate();
 			address = "/login.jsp";
 		} else if (action.equals("login")) {
+			
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
-			StudentBean studentBean = new StudentBean();
-			
-			if(studentBean.login(username, password)) {
-				session.setAttribute("studentBean", studentBean);
-				address = "/WEB-INF/pages/main.jsp";
+			if(areLoginParamValid(username, password)) {
+				
+				StudentBean studentBean = new StudentBean();				
+				
+				if(studentBean.login(username, password)) {
+					session.setAttribute("studentBean", studentBean);
+					address = "/WEB-INF/pages/main.jsp";
+				}
+				else {
+					session.setAttribute("loginNotification", "Invalid username or password");
+				}
 			}
+			
 		} else if (action.equals("registration")) {
+			
 			String name = req.getParameter("name");
 			String surname = req.getParameter("surname");
 			String password = req.getParameter("password");
 			String username = req.getParameter("username");
 			String mail = req.getParameter("mail");
-			StudentBean studentBean = new StudentBean();
-			Student student = new Student(); 
-			student.setName(name);
-			student.setSurname(surname);
-			student.setPassword(password);
-			student.setUsername(username);
-			student.setMail(mail);
-			studentBean.setStudent(student);
-			if(studentBean.add(student)) {
-				session.setAttribute("studentBean", studentBean);
-				address = "/WEB-INF/pages/updateProfile.jsp";
+			
+			String res = areRegistrationParamValid(name, surname, username, password, mail);
+			
+			if("".equals(res)) {
+				
+				StudentBean studentBean = new StudentBean();
+				
+				Student student = new Student(); 
+				
+				student.setName(name);
+				student.setSurname(surname);
+				student.setPassword(password);
+				student.setUsername(username);
+				student.setMail(mail);
+				student.setImage("");
+			
+				studentBean.setStudent(student);
+				
+				if(studentBean.add(student)) {
+					session.setAttribute("studentBean", studentBean);
+					address = "/WEB-INF/pages/updateProfile.jsp";
+				}
+				else {
+					address = "/login.jsp";
+				}
+				
 			}
 			else {
-				address = "/registration.jsp";
+				session.setAttribute("registrationNotification", res);
 			}
+			
+			
 		} else if (action.equals("update")) {
 			
 			Faculty faculty = fdi.getFacultyByName(req.getParameter("faculty"));
@@ -328,6 +353,36 @@ public class Controller extends HttpServlet {
 		doGet(req, resp);
 	}
 	
+	
+	private boolean areLoginParamValid(String username, String password) {
+		if("".equals(username) || "".equals(password))
+			return false;
+		return true;
+	}
+	
+	private String areRegistrationParamValid(String name, String surname, String username, String password, String mail) {
+		
+		if("".equals(name) || name.length() < 2)
+			return "Invalid name";
+		
+		if("".equals(surname) || surname.length() < 2)
+			return "Invalid surname";
+		
+		if("".equals(username) || username.length() < 4)			
+			return "Invalid username";
+		else if(sdi.doesUsernameExist(username)) {
+			return "Username already exist";
+		}		
+		
+		if("".equals(password) || password.length() < 4)
+			return "Invalid password";
+		
+		if("".equals(mail) || mail.length() < 5)
+			return "Invalid mail";
+		
+
+		return "";
+	}
 	
 	
 }

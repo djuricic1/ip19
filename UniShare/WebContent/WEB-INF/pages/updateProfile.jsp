@@ -22,36 +22,48 @@
 	<script src="js/update.js"></script>
 </head>
 <body>
-		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand" href="#">UniShare</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-			  <span class="navbar-toggler-icon"></span>
-			</button>
-			<!--<div class="collapse navbar-collapse" id="collapsibleNavbar">
-			  <ul class="navbar-nav">
+		<nav class="navbar navbar-expand-sm navbar-dark bg-custom" style="margin-bottom:0; background-color:#45668e; color: white; a:white;" >
+            
+            <a class="navbar-brand" href="Controller">UniShare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+			<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			  <ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-				  <a class="nav-link" href="http://localhost:8080/UniShare/login.jsp">Sign In</a>
+				  <a class="nav-link" style="color:white" href="Controller?action=toUpdate">Profile</a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="http://localhost:8080/UniShare/registration.jsp">Sign Up</a>
+					<a class="nav-link" href="Controller?action=connections">Connections</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav">
+				<li class="nav-item">
+				  <a class="nav-link" href="Controller?action=logout">Sign Out</a>
 				</li>
 				
 			  </ul>
-			</div>  --> 
-		  </nav>
-
+			</div>  
+          
+        </nav>
+				
+			
 		<div class="container-fluid" style="margin-top: 30px">
 		 	<div class="row">
     			<div class="col-sm-4" >
 				<form method="POST" action="Controller?action=update" enctype="multipart/form-data">
 					<% 
-						if(studentBean.getStudent().getImage() != null || !studentBean.getStudent().getImage().equals("")) {
+						if(studentBean.getStudent().getImage() != null) {
+							
 					%>	
+
 							<div class="form-group" id="imgContainer">
 					<%  } else { %>
-							<div class="form-group" id="imgContainer" style="display: none;"> <%} %>
+							<div class="form-group" id="imgContainer" style="display: none;"> 
+					<%} %>
 								<label for="img">Image:</label>
-								<img src="<%=request.getContextPath()%>\<%=studentBean.getStudent().getImage()%>" id="img" class="img-fluid">				
+								<img src="<%=request.getContextPath()%>/<%=studentBean.getStudent().getImage()%>" id="img" class="img-fluid">				
 							</div>
 					<%	
 						
@@ -85,7 +97,7 @@
 						<select id="faculty" name="faculty" class="form-control">
 							<%
 								for(Faculty faculty : facultyBean.getAllFaculties()) {
-									if(studentBean.getStudent().getFaculty().getId() != faculty.getId())
+									if(studentBean.getStudent().getFaculty() != null && studentBean.getStudent().getFaculty().getId() != faculty.getId())
 										out.println("<option selected>" + faculty.getName() + "</option>");
 									else
 										out.println("<option>" + faculty.getName() + "</option>");

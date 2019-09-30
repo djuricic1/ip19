@@ -16,5 +16,6 @@ public interface StudentDao {
 	List<Student> getAllStudentRequests(Student student);
 	List<Student> getAllStudentsByFacultyId(int facultyId);
 	//List<Student> getAllRequestSentByStudent(int studentId);
+	boolean doesUsernameExist(String username);
 	
 }

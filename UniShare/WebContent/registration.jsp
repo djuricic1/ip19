@@ -21,7 +21,7 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<a class="navbar-brand" href="#">UniShare</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 			  <span class="navbar-toggler-icon"></span>
@@ -33,11 +33,10 @@
 				</li>
 				<li class="nav-item">
 				  <a class="nav-link" href="http://localhost:8080/UniShare/registration.jsp">Sign Up</a>
-				</li>
-				
+				</li>				
 			  </ul>
 			</div>  
-		  </nav>
+		</nav>
 
 		
 		<div class="container-fluid" style="margin-top: 30px">
@@ -50,7 +49,7 @@
 					</div>
 					<div class="form-group">
 						<label for="surname">Surname:</label>
-						<input type="password" class="form-control" id="surname" placeholder="Enter surname" name="surname">
+						<input type="text" class="form-control" id="surname" placeholder="Enter surname" name="surname">
 					</div>
 					<div class="form-group">
 						<label for="username">Username:</label>

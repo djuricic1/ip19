@@ -31,19 +31,21 @@
 		<input type="hidden" id="custId" name="custId" value="<%=studentBean.getStudent().getId()%>">
 		
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand" href="/Controller">UniShare</a>
+            <a class="navbar-brand" href="Controller">UniShare</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-			  <ul class="navbar-nav">
+			  <ul class="navbar-nav mr-auto">
 				<li class="nav-item">
 				  <a class="nav-link" href="Controller?action=toUpdate">Profile</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="Controller?action=connections">Connections</a>
 				</li>
+			</ul>
+			<ul class="navbar-nav">
 				<li class="nav-item">
 				  <a class="nav-link" href="Controller?action=logout">Sign Out</a>
 				</li>

@@ -28,6 +28,7 @@ public class StudentDaoImpl implements StudentDao{
 	private static final String SQL_GET_ALL_STUDENT_REQUEST = "SELECT id from student join connection on id=student_id1 where student_id = ? and typeOfConnection=?";
 	private static final String SQL_GET_ALL_STUDENT_REQUESTS = "SELECT * FROM connection join student on student_id=id WHERE student_id1=? and typeOfConnection=1";
 	private static final String SQL_SELECT_ALL_BY_FACULTY_ID = "SELECT * FROM student where faculty_id=?";
+	private static final String SQL_SELECT_BY_USERNAME = "SELECT id FROM student where username=?";
 	
 	@Override
 	public List<Student> getAllStudents() {
@@ -352,5 +353,32 @@ public class StudentDaoImpl implements StudentDao{
 		return students;
 	}
 	
+
+	@Override
+	public boolean doesUsernameExist(String username) {
+		
+		Connection connection = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.checkOut();
+			PreparedStatement pstmt = connection.prepareStatement(SQL_SELECT_BY_USERNAME);
+			pstmt.setString(1, username);
+			rs = pstmt.executeQuery();			
+			
+			if(rs.next())
+				return true;
+			
+			pstmt.close();
+			
+		} catch(Exception ex) {
+			//TODO: fix this
+			ex.printStackTrace();
+		} finally {
+			connectionPool.checkIn(connection);
+		} 
+		
+		
+		return false;
+	}
 	
 }
