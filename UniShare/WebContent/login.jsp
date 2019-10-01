@@ -4,7 +4,6 @@
     pageEncoding="ISO-8859-1"%>
 <%@page import="beans.StudentBean"%>
 
-<jsp:useBean id="facultyBean" class="beans.FacultyBean"/>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -13,11 +12,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">  	
   		
   		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">	
-		
+	
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
  		<script src="js/login.js"></script> 
+		
+
+ </head>
 	</head>
 	<body>
 
@@ -47,7 +50,7 @@
 									</div>
 									<%
 										String ntf = session.getAttribute("loginNotification") != null ? session.getAttribute("loginNotification").toString(): "" ; 
-										if(!ntf.equals("")) {
+										if(!"".equals(ntf)) {
 									%>  
 										<div id="loginNtf" align="center" class="text-danger" style="font-size: 12px;">
 								          <p><%=ntf%></p>
@@ -106,7 +109,7 @@
 								</div>
 								<%
 									ntf = session.getAttribute("registrationNotification") != null ? session.getAttribute("registrationNotification").toString(): "" ; 
-									if(!ntf.equals("")) {
+									if(!"".equals(ntf)) {
 								%>  
 									<div id="registrationNtf" align="center" class="text-danger" style="font-size: 12px;">
 							          <p><%=ntf%></p>

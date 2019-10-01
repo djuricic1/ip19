@@ -1,6 +1,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="dto.Student"%>
 <%@ page import="dto.Post"%>
@@ -17,7 +17,7 @@
 <head><title>UniShare Main</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">  	
-  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  		
 
 		<title>UniShare Login</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -26,43 +26,57 @@
  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<script src="js/script.js"></script>
 		<script src="js/main.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel = "stylesheet" type = "text/css" href = "css/style.css" />
 </head>
 <body>
 		<input type="hidden" id="custId" name="custId" value="<%=studentBean.getStudent().getId()%>">
 		
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand" href="Controller">UniShare</a>
+       
+		<nav class="navbar navbar-expand-sm navbar-custom">
+            
+            <a class="navbar-brand" href="Controller" style="font-size:20px;">UniShare</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-			  <ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-				  <a class="nav-link" href="Controller?action=toUpdate">Profile</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="Controller?action=connections">Connections</a>
-				</li>
-			</ul>
-			<ul class="navbar-nav">
-				<li class="nav-item">
-				  <a class="nav-link" href="Controller?action=logout">Sign Out</a>
-				</li>
-				
-			  </ul>
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+					  <a class="nav-link" style="color:white" href="Controller?action=toUpdate">Profile</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="Controller?action=connections">Connections</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="Controller?action=logout">Sign Out</a>
+					</li>	
+				</ul>
 			</div>  
           
         </nav>
+				
 
         <div class="container-fluid" style="margin-top:30px">
             <div class="row">
-                <div class="col-sm-3">          
-                    <ul class="list-group">
+                <div class="col-sm-3 px-4"> 
+                	<h6 class="px-4">Connected users</h6>         
+                    <ul class="list-group px-4" style="margin-top: 5px;" >
                     <%                    	
-                        for(Student student : studentBean.getAllStudentConnected()) {
-                        	out.println("<li class=\"list-group-item\">" + student.getUsername() + "</li>");
-                        }
+                        for(Student student : studentBean.getAllStudentConnected()) { 
+                    %>             
+                    	         
+                        <li class="list-group-item" style="border-left: 0px; border-right: 0px; border-bottom:1px dotted; border-top:0px; margin-top:2px;" > 
+                        	<img src=<%=student.getImage()==null || "".equals(student.getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + student.getImage() %> 
+                        		style="width:25px;height:27px;" class="rounded-circle" alt="Cinque Terre">
+                        	<a href="#" class="connected-users" style="font-size:16px;"> <%=student.getName()%> <%=student.getSurname()%> </a>
+                        </li>
+                   	
+                   	<%  
+                   	}
                     %>
                     </ul>
                 </div>

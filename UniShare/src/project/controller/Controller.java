@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -57,292 +59,323 @@ public class Controller extends HttpServlet {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 		
-		if (action == null || action.equals("")) {
-			// check this later
-			if(session.getAttribute("studentBean")!=null) {
-				address = "/WEB-INF/pages/main.jsp";
-			}
-			else {
-				address = "/login.jsp";
-			}
-		} else if (action.equals("logout")) {
-			address = "/login.jsp";
-			session.invalidate();
-		} else if (action.equals("toUpdate")) {
-			address = "/WEB-INF/pages/updateProfile.jsp";
-		} else if (action.equals("logout")) {
-			session.invalidate();
-			address = "/login.jsp";
-		} else if (action.equals("login")) {
-			
-			String username = req.getParameter("username");
-			String password = req.getParameter("password");
-			if(areLoginParamValid(username, password)) {
-				
-				StudentBean studentBean = new StudentBean();				
-				
-				if(studentBean.login(username, password)) {
-					session.setAttribute("studentBean", studentBean);
+		
+
+		
+
+			if (action == null || action.equals("")) {
+				// check this later
+				if(session.getAttribute("studentBean")!=null) {
 					address = "/WEB-INF/pages/main.jsp";
-				}
-				else {
-					session.setAttribute("loginNotification", "Invalid username or password");
-				}
-			}
-			
-		} else if (action.equals("registration")) {
-			
-			String name = req.getParameter("name");
-			String surname = req.getParameter("surname");
-			String password = req.getParameter("password");
-			String username = req.getParameter("username");
-			String mail = req.getParameter("mail");
-			
-			String res = areRegistrationParamValid(name, surname, username, password, mail);
-			
-			if("".equals(res)) {
-				
-				StudentBean studentBean = new StudentBean();
-				
-				Student student = new Student(); 
-				
-				student.setName(name);
-				student.setSurname(surname);
-				student.setPassword(password);
-				student.setUsername(username);
-				student.setMail(mail);
-				student.setImage("");
-			
-				studentBean.setStudent(student);
-				
-				if(studentBean.add(student)) {
-					session.setAttribute("studentBean", studentBean);
-					address = "/WEB-INF/pages/updateProfile.jsp";
 				}
 				else {
 					address = "/login.jsp";
 				}
+			} else if (action.equals("logout")) {
+				address = "/login.jsp";
+				session.invalidate();
+			} else if (action.equals("toUpdate")) {
+				address = "/WEB-INF/pages/updateProfile.jsp";
+			} else if (action.equals("logout")) {
+				session.invalidate();
+				address = "/login.jsp";
+			} else if (action.equals("login")) {
 				
-			}
-			else {
-				session.setAttribute("registrationNotification", res);
-			}
+				String username = req.getParameter("username");
+				String password = req.getParameter("password");
+				if(areLoginParamValid(username, password)) {
+					
+					StudentBean studentBean = new StudentBean();				
+					
+					if(studentBean.login(username, password)) {
+						session.setAttribute("studentBean", studentBean);
+						address = "/WEB-INF/pages/main.jsp";
+					}
+					else {
+						session.setAttribute("loginNotification", "Invalid username or password");
+					}
+				}
+				
+			} else if (action.equals("registration")) {
+				
+				String name = req.getParameter("name");
+				String surname = req.getParameter("surname");
+				String password = req.getParameter("password");
+				String username = req.getParameter("username");
+				String mail = req.getParameter("mail");
+				
+				String res = areRegistrationParamValid(name, surname, username, password, mail);
+				
+				if("".equals(res)) {
+					
+					StudentBean studentBean = new StudentBean();
+					
+					Student student = new Student(); 
+					
+					student.setName(name);
+					student.setSurname(surname);
+					student.setPassword(password);
+					student.setUsername(username);
+					student.setMail(mail);
+					student.setImage("");
+				
+					studentBean.setStudent(student);
+					
+					if(studentBean.add(student)) {
+						session.setAttribute("studentBean", studentBean);
+						address = "/WEB-INF/pages/updateProfile.jsp";
+					}
+					else {
+						address = "/login.jsp";
+					}
+					
+				}
+				else {
+					session.setAttribute("registrationNotification", res);
+				}
+				
+				
+			} else if (action.equals("update")) {
+				
+				String name = req.getParameter("name");
+				String surname = req.getParameter("surname");
+				String password = req.getParameter("password");
+				String username = req.getParameter("username");			
+				String mail = req.getParameter("mail");
+				Faculty faculty = fdi.getFacultyByName(req.getParameter("faculty"));
+				
+				String res = areRegistrationParamValid(name, surname, username, password, mail);
+				if("".equals(res) && faculty!=null) {
+					
 			
-			
-		} else if (action.equals("update")) {
-			
-			Faculty faculty = fdi.getFacultyByName(req.getParameter("faculty"));
-			
-			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
-			studentBean.getStudent().setName(req.getParameter("name"));
-			studentBean.getStudent().setSurname(req.getParameter("surname"));
-			studentBean.getStudent().setPassword(req.getParameter("password"));
-			studentBean.getStudent().setDescription(req.getParameter("description"));
-			studentBean.getStudent().setStudyProgram(req.getParameter("studyProgram"));
-			studentBean.getStudent().setFaculty(faculty);
-			studentBean.getStudent().setFacultyYear(Integer.parseInt(req.getParameter("facultyYear")));
-
-			
-			// file saving 
-			Part filePart = req.getPart("file");
-			InputStream fileContent = filePart.getInputStream();
-			
-			byte[] buffer = new byte[fileContent.available()];
-			fileContent.read(buffer);
-			// TODO: CHANGE THIS SHIT 
-			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\img\\userImg\\" + filePart.getSubmittedFileName();
-			File targetFile = new File(uploadPath);
-			
-			OutputStream outStream = new FileOutputStream(targetFile);
-			outStream.write(buffer);
-			address = "/WEB-INF/pages/updateProfile.jsp";
-			studentBean.getStudent().setImage("/assets/img/userImg/" + filePart.getSubmittedFileName());
-			
-			if(studentBean.update()) {
-				System.out.println("SUCCESS");
-			}
-			else {
-				System.out.println("UNSUCCESS");
-			}
-			
-			//System.out.println(test);
-			
-		} else if (action.equals("like")) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-			String json = "";
-			if(br != null){
-				json = br.readLine();
-				System.out.println(json);
-			}
-			
-			JSONObject obj = new JSONObject(json);
-			int postId = obj.getInt("postId");
-			int rate  = obj.getInt("rate");
-			int studentId = ((StudentBean)session.getAttribute("studentBean")).getStudent().getId();
-			
-			Post post = pdi.getById(postId);
-			Like like = new Like();
-			like.setStudentId(studentId);
-			like.setPostId(postId);
-			
-			if(rate == 0) {					
-				post.setNumberOfLikes(post.getNumberOfLikes() + 1);
-				like.setType(0);
-			}
-			else {
-				post.setNumberOfDislikes(post.getNumberOfDislikes() + 1);
-				like.setType(1);
-			}
-			if(ldi.insertLike(like)) {
-				pdi.updatePostRate(post);
-			}else {
-				resp.setStatus(204);
-			}
-			return;
-			
-		} else if (action.equals("main")) {
-			
-		} else if (action.equals("post")) {
-			int studentId = Integer.parseInt(req.getParameter("studentId"));
-			long dateCreated = Long.parseLong(req.getParameter("dateCreated"));
-			String description = req.getParameter("description");
-			String linkPost = req.getParameter("linkPostText");
-			
-			Post post = new Post();
-			post.setDescription(description);
-			post.setNumberOfLikes(0);
-			post.setNumberOfDislikes(0);
-			post.setStudentId(studentId);
-			post.setDatePosted(new Date(dateCreated));
-			
-			String typeOfPost = "0";
-			if(linkPost.equals(""))
-				typeOfPost = "0";
-			else if(linkPost.contains("youtube.com")) {
-				typeOfPost = "2";
-				linkPost = linkPost.replace("watch?v=", "embed/");
-				System.out.println(linkPost);
-			}
-			else {
-				typeOfPost = "1";
-			}
-			
-			post.setTypeOfPost(typeOfPost);
-			post.setLinkPost(linkPost);
-			
-			
-			PostDaoImpl pdi = new PostDaoImpl();
-			pdi.insertPost(post);
-			
-			
-			return;	
-		} else if (action.equals("addFile")) {
-			System.out.println("TEST");
-			
-			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
-			int studentId = studentBean.getStudent().getId();
-			String description = req.getParameter("description");
-			
-			// file saving 
-			Part filePart = req.getPart("file");
-			InputStream fileContent = filePart.getInputStream();
-			
-			byte[] buffer = new byte[fileContent.available()];
-			fileContent.read(buffer);
-			// TODO: CHANGE THIS SHIT 
-			String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\files\\" + filePart.getSubmittedFileName();
-			File targetFile = new File(uploadPath);
-			
-			OutputStream outStream = new FileOutputStream(targetFile);
-			outStream.write(buffer);
-			
-			dto.File file = new dto.File();
-			file.setDescription(description);
-			file.setPath("/assets/img/userImg/" + filePart.getSubmittedFileName());
-			file.setStudentId(studentId);
-			
-			fileDaoImpl.insertFile(file);
-			address = "/WEB-INF/pages/main.jsp";
-		} else if (action.equals("addBlog")) {
-			
-			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
-			int studentId = studentBean.getStudent().getId();
-			String title = req.getParameter("title");
-			String blogDescription = req.getParameter("blogDescription");
-			
-			Blog blog = new Blog();
-			
-			blog.setDateCreated(new Date(System.currentTimeMillis()));
-			blog.setContent(blogDescription);
-			blog.setStudentId(studentId);
-			blog.setTitle(title);
-			
-			bdi.insertBlog(blog);
-			address = "/WEB-INF/pages/main.jsp";
-			
-			
-		} else if (action.equals("addComment")) {
-			StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
-			int studentId = studentBean.getStudent().getId();
-			String blogComment = req.getParameter("blogComment");
-			bdi.addComment(req.getParameter("blogId"), blogComment, studentId);
-			address = "/WEB-INF/pages/main.jsp";
-		} else if(action.equals("connections")) {
-			address = "/WEB-INF/pages/connection.jsp";
-		} else if(action.equals("sendConnectionRequest")) {
-			address = "/WEB-INF/pages/connection.jsp";
-			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-			String json = "";
-			if(br != null){
-				json = br.readLine();
-				System.out.println(json);
-			}
-			
-			JSONObject obj = new JSONObject(json);
-			int senderId = obj.getInt("senderId");
-			int recieverId  = obj.getInt("recieverId");
-			if(cdi.insertConnection(senderId, recieverId, 1))
+					
+					StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+					
+					studentBean.getStudent().setName(name);
+					studentBean.getStudent().setSurname(surname);
+					studentBean.getStudent().setPassword(password);
+					studentBean.getStudent().setUsername(username);
+					studentBean.getStudent().setMail(mail);
+					
+					studentBean.getStudent().setDescription(req.getParameter("description"));
+					studentBean.getStudent().setStudyProgram(req.getParameter("studyProgram"));
+					
+					studentBean.getStudent().setFaculty(faculty);
+					studentBean.getStudent().setFacultyYear(Integer.parseInt(req.getParameter("facultyYear")));
+	
+					Part filePart = req.getPart("file");
+					
+					try {
+						// file saving 
+						InputStream fileContent = filePart.getInputStream();					
+						byte[] buffer = new byte[fileContent.available()];
+						fileContent.read(buffer);		
+						String webRootPath = getWebRootPath();
+						
+						String uploadPath = webRootPath + "assets\\img\\userImg\\" + username + "_" + filePart.getSubmittedFileName();
+						
+						File targetFile = new File(uploadPath);
+						
+						OutputStream outStream = new FileOutputStream(targetFile);
+						outStream.write(buffer);
+						outStream.close();
+					} catch (IOException ioe) {
+						// TODO: handle exception
+						ioe.printStackTrace();
+					} 
+					
+					
+					address = "/WEB-INF/pages/updateProfile.jsp";
+					if(!"".equals( filePart.getSubmittedFileName()))
+						studentBean.getStudent().setImage("/assets/img/userImg/" +  username + "_" + filePart.getSubmittedFileName());
+					//System.out.println(studentBean.getStudent().getImage());
+					if(!studentBean.update()) {
+						System.out.println("Database problem");
+						session.setAttribute("updateNotification", "Error updating your profile");
+					}
+					
+				}
+				else {
+					session.setAttribute("updateNotification", res);
+					address = "/WEB-INF/pages/updateProfile.jsp";
+				}		
+				
+			} else if (action.equals("like")) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+				String json = "";
+				if(br != null){
+					json = br.readLine();
+					System.out.println(json);
+				}
+				
+				JSONObject obj = new JSONObject(json);
+				int postId = obj.getInt("postId");
+				int rate  = obj.getInt("rate");
+				int studentId = ((StudentBean)session.getAttribute("studentBean")).getStudent().getId();
+				
+				Post post = pdi.getById(postId);
+				Like like = new Like();
+				like.setStudentId(studentId);
+				like.setPostId(postId);
+				
+				if(rate == 0) {					
+					post.setNumberOfLikes(post.getNumberOfLikes() + 1);
+					like.setType(0);
+				}
+				else {
+					post.setNumberOfDislikes(post.getNumberOfDislikes() + 1);
+					like.setType(1);
+				}
+				if(ldi.insertLike(like)) {
+					pdi.updatePostRate(post);
+				}else {
+					resp.setStatus(204);
+				}
+				return;
+				
+			} else if (action.equals("main")) {
+				
+			} else if (action.equals("post")) {
+				int studentId = Integer.parseInt(req.getParameter("studentId"));
+				long dateCreated = Long.parseLong(req.getParameter("dateCreated"));
+				String description = req.getParameter("description");
+				String linkPost = req.getParameter("linkPostText");
+				
+				Post post = new Post();
+				post.setDescription(description);
+				post.setNumberOfLikes(0);
+				post.setNumberOfDislikes(0);
+				post.setStudentId(studentId);
+				post.setDatePosted(new Date(dateCreated));
+				
+				String typeOfPost = "0";
+				if(linkPost.equals(""))
+					typeOfPost = "0";
+				else if(linkPost.contains("youtube.com")) {
+					typeOfPost = "2";
+					linkPost = linkPost.replace("watch?v=", "embed/");
+					System.out.println(linkPost);
+				}
+				else {
+					typeOfPost = "1";
+				}
+				
+				post.setTypeOfPost(typeOfPost);
+				post.setLinkPost(linkPost);
+				
+				
+				PostDaoImpl pdi = new PostDaoImpl();
+				pdi.insertPost(post);
+				
+				
+				return;	
+			} else if (action.equals("addFile")) {
+				System.out.println("TEST");
+				
+				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+				int studentId = studentBean.getStudent().getId();
+				String description = req.getParameter("description");
+				
+				// file saving 
+				Part filePart = req.getPart("file");
+				InputStream fileContent = filePart.getInputStream();
+				
+				byte[] buffer = new byte[fileContent.available()];
+				fileContent.read(buffer);
+				// TODO: CHANGE THIS SHIT 
+				String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\files\\" + filePart.getSubmittedFileName();
+				File targetFile = new File(uploadPath);
+				
+				OutputStream outStream = new FileOutputStream(targetFile);
+				outStream.write(buffer);
+				
+				dto.File file = new dto.File();
+				file.setDescription(description);
+				file.setPath("/assets/img/userImg/" + filePart.getSubmittedFileName());
+				file.setStudentId(studentId);
+				
+				fileDaoImpl.insertFile(file);
+				address = "/WEB-INF/pages/main.jsp";
+			} else if (action.equals("addBlog")) {
+				
+				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+				int studentId = studentBean.getStudent().getId();
+				String title = req.getParameter("title");
+				String blogDescription = req.getParameter("blogDescription");
+				
+				Blog blog = new Blog();
+				
+				blog.setDateCreated(new Date(System.currentTimeMillis()));
+				blog.setContent(blogDescription);
+				blog.setStudentId(studentId);
+				blog.setTitle(title);
+				
+				bdi.insertBlog(blog);
+				address = "/WEB-INF/pages/main.jsp";
+				
+				
+			} else if (action.equals("addComment")) {
+				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
+				int studentId = studentBean.getStudent().getId();
+				String blogComment = req.getParameter("blogComment");
+				bdi.addComment(req.getParameter("blogId"), blogComment, studentId);
+				address = "/WEB-INF/pages/main.jsp";
+			} else if(action.equals("connections")) {
+				address = "/WEB-INF/pages/connection.jsp";
+			} else if(action.equals("sendConnectionRequest")) {
+				address = "/WEB-INF/pages/connection.jsp";
+				BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+				String json = "";
+				if(br != null){
+					json = br.readLine();
+					System.out.println(json);
+				}
+				
+				JSONObject obj = new JSONObject(json);
+				int senderId = obj.getInt("senderId");
+				int recieverId  = obj.getInt("recieverId");
+				if(cdi.insertConnection(senderId, recieverId, 1))
+					resp.setStatus(200);
+				
+			} else if(action.equals("acceptConnectionRequest")) {
+				address = "/WEB-INF/pages/connection.jsp";
+				BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+				String json = "";
+				if(br != null){
+					json = br.readLine();
+					System.out.println(json);
+				}
+				
+				JSONObject obj = new JSONObject(json);
+				int senderId = obj.getInt("senderId");
+				int accepterId  = Integer.parseInt(obj.getString("accepterId"));
+				int accept = obj.getInt("accept");
+				
+				
+				
+				if(accept==1) {
+					cdi.acceptConnection(senderId, accepterId);
+				 }
+				else {
+					cdi.deleteConnection(senderId, accepterId);
+				}
 				resp.setStatus(200);
-			
-		} else if(action.equals("acceptConnectionRequest")) {
-			address = "/WEB-INF/pages/connection.jsp";
-			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-			String json = "";
-			if(br != null){
-				json = br.readLine();
-				System.out.println(json);
-			}
-			
-			JSONObject obj = new JSONObject(json);
-			int senderId = obj.getInt("senderId");
-			int accepterId  = Integer.parseInt(obj.getString("accepterId"));
-			int accept = obj.getInt("accept");
-			
-			
-			
-			if(accept==1) {
-				cdi.acceptConnection(senderId, accepterId);
-			 }
-			else {
+			} else if(action.equals("deleteConnection")) {
+				address = "/WEB-INF/pages/connection.jsp";
+				BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+				String json = "";
+				if(br != null){
+					json = br.readLine();
+					System.out.println(json);
+				}
+				
+				JSONObject obj = new JSONObject(json);
+				int senderId = obj.getInt("senderId");
+				int accepterId  = obj.getInt("accepterId");
+				
 				cdi.deleteConnection(senderId, accepterId);
+				cdi.deleteConnection(accepterId, senderId);
 			}
-			resp.setStatus(200);
-		} else if(action.equals("deleteConnection")) {
-			address = "/WEB-INF/pages/connection.jsp";
-			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-			String json = "";
-			if(br != null){
-				json = br.readLine();
-				System.out.println(json);
-			}
-			
-			JSONObject obj = new JSONObject(json);
-			int senderId = obj.getInt("senderId");
-			int accepterId  = obj.getInt("accepterId");
-			
-			cdi.deleteConnection(senderId, accepterId);
-			cdi.deleteConnection(accepterId, senderId);
-		}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);
 		dispatcher.forward(req, resp);
@@ -368,8 +401,9 @@ public class Controller extends HttpServlet {
 		if("".equals(surname) || surname.length() < 2)
 			return "Invalid surname";
 		
-		if("".equals(username) || username.length() < 4)			
-			return "Invalid username";
+		if("".equals(username))
+			if( username.length() < 4)			
+				return "Invalid username";
 		else if(sdi.doesUsernameExist(username)) {
 			return "Username already exist";
 		}		
@@ -380,9 +414,19 @@ public class Controller extends HttpServlet {
 		if("".equals(mail) || mail.length() < 5)
 			return "Invalid mail";
 		
-
 		return "";
 	}
 	
+	private String getWebRootPath() {
+		 ResourceBundle bundle =
+			      PropertyResourceBundle.getBundle("daoimpl.ConnectionPool");
+		 String result = bundle.getString("webRootFolder");		 
+		 return result;
+	}
+	
+	private boolean saveProfilePicture(InputStream image) {
+		
+		return true;
+	}
 	
 }
