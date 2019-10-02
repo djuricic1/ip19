@@ -241,6 +241,13 @@ public class Controller extends HttpServlet {
 				String description = req.getParameter("description");
 				String linkPost = req.getParameter("linkPostText");
 				
+				if("".equals(description) && "".equals(linkPost)) {
+					resp.setStatus(403);
+					resp.setContentType("text/plain");
+					resp.getWriter().write("Invalid post data");
+					return;
+				}
+				
 				Post post = new Post();
 				post.setDescription(description);
 				post.setNumberOfLikes(0);
@@ -269,33 +276,62 @@ public class Controller extends HttpServlet {
 				
 				
 				return;	
+			
+				
 			} else if (action.equals("addFile")) {
-				System.out.println("TEST");
+		
 				
 				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
 				int studentId = studentBean.getStudent().getId();
-				String description = req.getParameter("description");
+				String description = req.getParameter("fileDescription");
 				
 				// file saving 
 				Part filePart = req.getPart("file");
 				InputStream fileContent = filePart.getInputStream();
+				if("".equals(filePart.getSubmittedFileName())) {
+					
+					session.setAttribute("addFileNtf", "Please choose file");
+					//address = "/WEB-INF/pages/main.jsp";
 				
-				byte[] buffer = new byte[fileContent.available()];
-				fileContent.read(buffer);
-				// TODO: CHANGE THIS SHIT 
-				String uploadPath = "C:\\Users\\djdjuricic\\ip-projektni\\UniShare\\WebContent\\" + "assets\\files\\" + filePart.getSubmittedFileName();
-				File targetFile = new File(uploadPath);
+				}
+				else {
 				
-				OutputStream outStream = new FileOutputStream(targetFile);
-				outStream.write(buffer);
-				
-				dto.File file = new dto.File();
-				file.setDescription(description);
-				file.setPath("/assets/img/userImg/" + filePart.getSubmittedFileName());
-				file.setStudentId(studentId);
-				
-				fileDaoImpl.insertFile(file);
+					try {
+						byte[] buffer = new byte[fileContent.available()];
+						fileContent.read(buffer);
+						
+						String root = getWebRootPath();
+						
+						String uploadPath = root + "assets\\files\\" + filePart.getSubmittedFileName();
+						File targetFile = new File(uploadPath);
+						
+						OutputStream outStream = new FileOutputStream(targetFile);
+						outStream.write(buffer);
+					} catch (IOException e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+					
+					dto.File file = new dto.File();
+					if("".equals(description)) {
+						file.setDescription("No file description");
+					}
+					else 
+						file.setDescription(description);
+					
+					file.setPath("/assets/files/" + filePart.getSubmittedFileName());
+					file.setStudentId(studentId);
+					
+					if(!fileDaoImpl.insertFile(file)) {
+						session.setAttribute("addFileNtf", "Err saving Your file on server");	
+					}
+					else {
+						session.setAttribute("addFileNtf", "Succesful");
+					}
+					
+				}
 				address = "/WEB-INF/pages/main.jsp";
+				
 			} else if (action.equals("addBlog")) {
 				
 				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
@@ -303,14 +339,21 @@ public class Controller extends HttpServlet {
 				String title = req.getParameter("title");
 				String blogDescription = req.getParameter("blogDescription");
 				
-				Blog blog = new Blog();
-				
-				blog.setDateCreated(new Date(System.currentTimeMillis()));
-				blog.setContent(blogDescription);
-				blog.setStudentId(studentId);
-				blog.setTitle(title);
-				
-				bdi.insertBlog(blog);
+				if("".equals(title) || "".equals(blogDescription)) {
+					session.setAttribute("addBlogNtf", "Please add title and description of your blog.");
+				}
+				else {
+					session.setAttribute("addBlogNtf", "Succesful");
+					Blog blog = new Blog();
+					
+					blog.setDateCreated(new Date(System.currentTimeMillis()));
+					blog.setContent(blogDescription);
+					blog.setStudentId(studentId);
+					blog.setTitle(title);
+					
+					bdi.insertBlog(blog);
+					
+				}
 				address = "/WEB-INF/pages/main.jsp";
 				
 				
@@ -336,6 +379,10 @@ public class Controller extends HttpServlet {
 				int recieverId  = obj.getInt("recieverId");
 				if(cdi.insertConnection(senderId, recieverId, 1))
 					resp.setStatus(200);
+				else {
+					System.out.println("ERR");
+				}
+				return;
 				
 			} else if(action.equals("acceptConnectionRequest")) {
 				address = "/WEB-INF/pages/connection.jsp";

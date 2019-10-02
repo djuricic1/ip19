@@ -37,10 +37,12 @@ function acceptConnectionRequest(id, accept) {
             cln.id = "connected-" + id;
             var c = cln.children;
             var rc = c[0];            
-            var chRC = rc.children;            
-            chRC[2].style.display = 'none';
+            var chRC = rc.children;      
+            rc.removeChild(rc.children[2]);            
             chRC[1].children[0].innerHTML = "Delete connection";
             chRC[1].children[0].setAttribute( "onclick", "deleteConnection(" + id +"," + object.accepterId +")");
+            chRC[1].className = "col-sm-6";
+            chRC[1].children[0].setAttribute("style", "background-color:#45668e; color:white; width:180px; float:right;");
             document.getElementById("request-" + id).style.display= 'none';
             document.getElementById("connected").appendChild(cln);
             if(accept == 1) {

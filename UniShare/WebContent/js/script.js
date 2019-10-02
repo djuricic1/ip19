@@ -25,14 +25,14 @@ function addRate(rate, postId) {
     request.onreadystatechange = function() {
         if((request.readyState == 4) && (request.status == 200)) {
             if(rate === 0) {
-                var result =  1 + Number(document.getElementById("post-like-" + postId).innerHTML.split(":")[1]);
+                var result =  1 + Number(document.getElementById("post-like-" + postId).innerHTML);
                 console.log(result);
-                document.getElementById("post-like-" + postId).innerHTML = "Likes:" + result;
+                document.getElementById("post-like-" + postId).innerHTML = result;
             }
             else {
-                var result =  1 + Number(document.getElementById("post-dislike-" + postId).innerHTML.split(":")[1]);
+                var result =  1 + Number(document.getElementById("post-dislike-" + postId).innerHTML);
                 console.log(result);
-                document.getElementById("post-dislike-" + postId).innerHTML =  "Dislikes:" + result;
+                document.getElementById("post-dislike-" + postId).innerHTML =  	result;
             }
         }
         

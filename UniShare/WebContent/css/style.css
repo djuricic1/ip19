@@ -26,3 +26,23 @@
 	color: black;
 	text-decoration: none;
 }
+
+.post-style {		
+	background-color: white;		
+}
+
+.blue .active a,
+.blue .active a:hover {
+    background-color: #45668e;
+}
+
+.nav-pills > .active > a, 
+.nav-pills > .active > a:hover {
+    background-color: #45668e;
+}
+
+.nav-pills > li > a {
+	background-color: #45668e;
+	color: white;
+	margin-right:2px;
+}
