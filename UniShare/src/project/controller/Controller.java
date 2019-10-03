@@ -473,9 +473,5 @@ public class Controller extends HttpServlet {
 		 return result;
 	}
 	
-	private boolean saveProfilePicture(InputStream image) {
-		
-		return true;
-	}
-	
+
 }

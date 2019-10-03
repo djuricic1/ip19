@@ -68,7 +68,13 @@
 	      <a class="nav-link active" data-toggle="pill"  href="#home">All students</a>
 	    </li>
 	    <li class="nav-item">
-	      <a class="nav-link" data-toggle="pill"  href="#request">Connection request</a>
+	    <% int c = studentBean.getAllConnectionRequests().size();	%>				
+							
+	      <a class="nav-link" data-toggle="pill"  href="#request">Connection request
+	      	<% if(c >= 1){ %>
+								<span class="badge badge-danger"><%=c%></span>
+			<%} %>
+	      </a>
 	    </li>
 	    <li class="nav-item">
 	      <a class="nav-link" data-toggle="pill" href="#connected">Connected students</a>
@@ -117,7 +123,6 @@
 	    
 	    
 	    <div id="request" class="container-fluid tab-pane fade"><br>
-	      <h3>Requests</h3>
 	      
 	      	<% for(Student student : studentBean.getAllConnectionRequests()) { %>
 	      		

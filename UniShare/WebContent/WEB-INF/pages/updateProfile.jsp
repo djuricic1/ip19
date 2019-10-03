@@ -52,7 +52,13 @@
 				        </div>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="Controller?action=connections">Connections</a>
+						<a class="nav-link" href="Controller?action=connections">Connections
+						<%
+							int c = studentBean.getAllConnectionRequests().size();
+							if(c >= 1){ %>
+								<span class="badge badge-danger"><%=c%></span>
+							<%} %>
+						</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav">
