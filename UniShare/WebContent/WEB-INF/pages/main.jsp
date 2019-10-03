@@ -44,7 +44,14 @@
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-					  <a class="nav-link" style="color:white" href="Controller?action=toUpdate">Profile</a>
+						<a class="nav-link" href="Controller">Home</a>
+					</li>
+					<li class="nav-item dropdown">
+					  <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white" href="#">Profile</a>
+					   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				          <a class="dropdown-item" href="Controller?action=viewProfile&userId=<%=studentBean.getStudent().getId()%>">Profile</a>
+				          <a class="dropdown-item" href="Controller?action=toUpdate">Update profile</a>				          
+				        </div>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="Controller?action=connections">Connections</a>
@@ -62,7 +69,7 @@
 
         <div class="container-fluid" style="margin-top:30px">
             <div class="row">
-                <div class="col-sm-3 px-4"> 
+                <div class="col-sm-3 px-4" style="maxheight:400px; overflow-y:auto"> 
                 	<h6 class="px-4">Connected users</h6>         
                     <ul class="list-group px-4" style="margin-top: 5px;" >
                     <%                    	
@@ -72,7 +79,7 @@
                         <li class="list-group-item" style="border-left: 0px; border-right: 0px; border-bottom:1px dotted; border-top:0px; margin-top:2px;" > 
                         	<img src=<%=student.getImage()==null || "".equals(student.getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + student.getImage() %> 
                         		style="width:25px;height:27px;" class="rounded-circle" alt="Cinque Terre">
-                        	<a href="#" class="connected-users" style="font-size:16px;"> <%=student.getName()%> <%=student.getSurname()%> </a>
+                        	<a href="Controller?action=viewProfile&userId=<%=student.getId()%>" class="connected-users" style="font-size:16px;"> <%=student.getName()%> <%=student.getSurname()%> </a>
                         </li>
                    	
                    	<%  
@@ -101,7 +108,7 @@
                 		
                 	</div>
 
-                    <div class="row" id="postContainer">
+                    <div class="row" id="postContainer"  >	
                         <%
                         	SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss dd-mm-yyyy"); 
                         	
@@ -109,9 +116,14 @@
                             for(Post post : studentBean.getAllPosts()) {
                         %>   	<div id=<%=post.getId()%> class="container-fluid post-style px-3 py-3 border border-light rounded" style="width:100%; margin-top:20px;">
 		                            <div class="row">
+		                            <%
+		                            	int uid = post.getStudentId();
+		                            %>
 		                            	&nbsp; &nbsp;<img src=<%=studentBean.getStudentById(post.getStudentId()).getImage()==null || "".equals(studentBean.getStudentById(post.getStudentId()).getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + studentBean.getStudentById(post.getStudentId()).getImage() %> 
 		                        		style="width:30px;height:27px;" class="rounded-circle" alt="Cinque Terre"> &nbsp;
+		                            	<a href="Controller?action=viewProfile&userId=<%=uid%>" class="connected-users">
 		                            	<h5> <%= studentBean.getStudentById(post.getStudentId()).getUsername()%> </h5>
+		                            	</a>
 	                            	</div>
 	                            	<h6> <%=dt.format(new Date(post.getDatePosted().getTime()))%></h6>
 	                            	<p class="form-control" style="background-color:white; border:0px;" > <%=post.getDescription() %> </p>
@@ -175,16 +187,21 @@
 							</form>
 					</div>				
 					
-					<div class="row" id="fileContainer">
+					<div class="row" id="fileContainer" style="max-height: 400px; overflow-y: auto; margin-top:5px;">
 	
 						<%
 							for(File file : studentBean.getAllFiles()) {
 						%>
 							<div class="container-fluid post-style px-3 py-3 border border-light rounded" style="margin-top:20px">
 							  <div class="row">
+							  <%
+							  	int uid = file.getStudentId();
+							  %>
 								&nbsp; &nbsp;<img src=<%=studentBean.getStudentById(file.getStudentId()).getImage()==null || "".equals(studentBean.getStudentById(file.getStudentId()).getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + studentBean.getStudentById(file.getStudentId()).getImage() %> 
 		                        		style="width:30px;height:27px;" class="rounded-circle" alt="Cinque Terre"> &nbsp;
-								<h5><%=studentBean.getStudentById(file.getStudentId()).getUsername()%></h5> 
+								<a href="Controller?action=viewProfile&userId=<%=uid%>" class="connected-users">
+									<h5><%=studentBean.getStudentById(file.getStudentId()).getUsername()%></h5> 
+								</a>
 								</div>
 								<p><%=file.getDescription()%></p>
 								<a href="<%=request.getContextPath()%><%=file.getPath()%>">Download file</a>
@@ -196,7 +213,7 @@
 					<hr>
 					<div class="row" id="blogContainer" style="margin-top:30px;">
 						<h6>Blog creation</h6>
-						<form id="new-blog-form" style="width:100%" action="Controller?action=addBlog" method="POST">
+						<form id="new-blog-form" style="width:100%" action="Controller?action=addBlog">
 								<div class="form-group" style="margin-bottom:2px;">
 									<label for="blogTitle" style="background-color:#dfe3ee; width:100%; margin-bottom:0px; font-size:16px;">Title:</label>
 									<input type="text" class="form-control" id="title" name="title">
@@ -219,25 +236,35 @@
 						<%
 							for(Blog blog : studentBean.getAllBlogs()) {
 						%>	
-							<div class="container-fluid post-style px-3 py-3 border border-light rounded" style="margin-top:20px">
+							<div id="blog-id-<%=blog.getId()%>" class="container-fluid post-style px-3 py-3 border border-light rounded" style="margin-top:20px">
 								 <div class="media">
 								    <div class="media-left">
 								     <img src=<%=studentBean.getStudentById(blog.getStudentId()).getImage()==null || "".equals(studentBean.getStudentById(blog.getStudentId()).getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + studentBean.getStudentById(blog.getStudentId()).getImage() %> 
 		                        		style="width:30px;height:27px;" class="media-object" alt="Cinque Terre"> &nbsp;
 								     
 								    </div>
+								   	 <%
+									  	int uid = blog.getStudentId();
+									  %>
 								    <div class="media-body">
-								  	  <h5 class="media-heading"><%=studentBean.getStudentById(blog.getStudentId()).getUsername()%></h5>
-								      <h6><%=blog.getTitle()%></h6>
-								      <p><%=blog.getContent()%></p>
-									  <% for(Comment comment : blog.getComments()) {%>
+								    	<a href="Controller?action=viewProfile&userId=<%=uid%>" class="connected-users">
+								  	  		<h5 class="media-heading"> <%=studentBean.getStudentById(blog.getStudentId()).getUsername()%></h5>
+								  	  	</a>
+								        <h6><%=blog.getTitle()%></h6>
+								        <p><%=blog.getContent()%></p>
+									    <% for(Comment comment : blog.getComments()) {%>
 								   		 	<div class="media">
 												<div class="media-left">
+												<%
+												  	 uid = comment.getStudentId();
+												  %>
 												 <img src=<%=studentBean.getStudentById(comment.getStudentId()).getImage()==null || "".equals(studentBean.getStudentById(comment.getStudentId()).getImage()) ? "https://image.flaticon.com/icons/svg/17/17004.svg" : "/UniShare" + studentBean.getStudentById(comment.getStudentId()).getImage() %> 
 		                        					style="width:30px;height:27px;" class="media-object" alt="Cinque Terre"> &nbsp;
 												</div>
 												<div class="media-body">
-													<h6 class="media-heading"><%=studentBean.getStudentById(comment.getStudentId()).getUsername()%></h6>
+													<a href="Controller?action=viewProfile&userId=<%=uid%>" class="connected-users">
+														<h6 class="media-heading"><%=studentBean.getStudentById(comment.getStudentId()).getUsername()%></h6>
+													</a>
 													<p><%=comment.getContent()%> </p>
 												</div>
 											</div>

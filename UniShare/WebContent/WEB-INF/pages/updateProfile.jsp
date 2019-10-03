@@ -34,17 +34,22 @@
 </head>
 <body>
 		
-		<nav class="navbar navbar-expand-sm navbar-custom">
-            
+		<nav class="navbar navbar-expand-sm navbar-custom">            
             <a class="navbar-brand" href="Controller" style="font-size:20px;">UniShare</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-					  <a class="nav-link" style="color:white" href="Controller?action=toUpdate">Profile</a>
+						<a class="nav-link" href="Controller">Home</a>
+					</li>
+					<li class="nav-item dropdown">
+					  <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white" href="#">Profile</a>
+					   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				          <a class="dropdown-item" href="Controller?action=viewProfile&userId=<%=studentBean.getStudent().getId()%>">Profile</a>
+				          <a class="dropdown-item" href="Controller?action=toUpdate">Update profile</a>				          
+				        </div>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="Controller?action=connections">Connections</a>
@@ -55,8 +60,7 @@
 						<a class="nav-link" href="Controller?action=logout">Sign Out</a>
 					</li>	
 				</ul>
-			</div>  
-          
+			</div>            
         </nav>
 				
 			

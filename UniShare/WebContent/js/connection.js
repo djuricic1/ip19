@@ -11,14 +11,14 @@ function requestConnection(id) {
             
             document.getElementById("btn-sr-" + id).disabled=true;
             document.getElementById("btn-sr-" + id).innerHTML = "Request sent";
-            //document.forms["new-post-form"].reset();
-           // document.getElementById("postContainer").innerHTML = "TEST" +  document.getElementById("postContainer").innerHTML;
         }
     };
+    
     request.open("POST", "Controller?action=sendConnectionRequest", true);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(JSON.stringify(object));
 }
+
 
 function acceptConnectionRequest(id, accept) {
     var request = new XMLHttpRequest();

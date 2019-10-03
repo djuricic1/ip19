@@ -59,10 +59,6 @@ public class Controller extends HttpServlet {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 		
-		
-
-		
-
 			if (action == null || action.equals("")) {
 				// check this later
 				if(session.getAttribute("studentBean")!=null) {
@@ -355,14 +351,16 @@ public class Controller extends HttpServlet {
 					
 				}
 				address = "/WEB-INF/pages/main.jsp";
-				
+				return;
 				
 			} else if (action.equals("addComment")) {
+				System.out.println("AAA komentar");
 				StudentBean studentBean = (StudentBean) session.getAttribute("studentBean");
 				int studentId = studentBean.getStudent().getId();
 				String blogComment = req.getParameter("blogComment");
 				bdi.addComment(req.getParameter("blogId"), blogComment, studentId);
 				address = "/WEB-INF/pages/main.jsp";
+
 			} else if(action.equals("connections")) {
 				address = "/WEB-INF/pages/connection.jsp";
 			} else if(action.equals("sendConnectionRequest")) {
@@ -422,6 +420,10 @@ public class Controller extends HttpServlet {
 				
 				cdi.deleteConnection(senderId, accepterId);
 				cdi.deleteConnection(accepterId, senderId);
+			} else if(action.equals("viewProfile")) {
+				address = "/WEB-INF/pages/profile.jsp";
+				int userId = Integer.parseInt(req.getParameter("userId"));
+				session.setAttribute("userId", userId);
 			}
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher(address);
