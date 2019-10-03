@@ -34,7 +34,7 @@
 		<input type="hidden" id="custId" name="custId" value="<%=studentBean.getStudent().getId()%>">
 		
        
-		<nav class="navbar navbar-expand-sm navbar-custom">
+		<nav class="navbar sticky-top navbar-expand-sm navbar-custom">
             
             <a class="navbar-brand" href="Controller" style="font-size:20px;">UniShare</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
