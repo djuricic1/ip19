@@ -15,7 +15,7 @@ public class LoginDao {
 
 		try {
 			con = connectionPool.checkOut();
-			ps = con.prepareStatement("Select uname, password from Users where uname = ? and password = ?");
+			ps = con.prepareStatement("Select username, password from admin where username = ? and password = ?");
 			ps.setString(1, user);
 			ps.setString(2, password);
 

@@ -2,7 +2,6 @@ package beans;
 
 import java.io.Serializable;
 
-import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -11,12 +10,12 @@ import javax.servlet.http.HttpSession;
 
 import dao.LoginDao;
 
-@ManagedBean(value = "obavezaBean")
+@javax.faces.bean.ManagedBean(name = "login")
 @SessionScoped
-public class LoginBean implements Serializable {
+public class Login implements Serializable {
 
-	/**
-	 * 
+	/*
+	 * 	
 	 */
 	private static final long serialVersionUID = 6955508471291131930L;
 	
@@ -50,11 +49,14 @@ public class LoginBean implements Serializable {
 
 	//validate login
 	public String validateUsernamePassword() {
+		
+		System.out.println("TEST 1234");
+		
 		boolean valid = LoginDao.validate(user, pwd);
 		if (valid) {
 			HttpSession session = SessionUtils.getSession();
 			session.setAttribute("username", user);
-			return "admin";
+			return "main";
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
