@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+
+	<h:outputScript library="js" name="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" />
+	<h:outputScript library="js" name="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" />
+	<h:outputScript library="js" name="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" />
+	<h:outputStylesheet library="css" name="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  />
+  		
+  	
+	<title>login</title>
+</h:head>
+<h:body>
+	Broj trenutno aktivnih korisnika glavne aplikacije: 
+	<h:outputText value = "#{login.getNumberOfActiveUsers()}" />
+	<br></br>
+	Ukupan broj registrovanih korisnika: 
+	<h:outputText value = "#{login.getNumberOfRegisteredUsers()}" />
+	<br></br>
+	<b>Korisnici</b>
+	<h:form>	
+		<h:dataTable value="${login.users}" var="user"
+			style="width: 100%; align: center">
+			<h:column>
+				<f:facet name="header">Username</f:facet>
+				<h:outputText value="${user.username}">
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+				<h:outputText value="${user.name}"></h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Deaktiviraj ga</f:facet>
+				<h:commandLink value="Deaktiviraj - ${obaveza.id}"
+					action="#{login.blockUser}">
+					<f:param value="${user.id}" name="id" />
+				</h:commandLink>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Resetuj lozinku</f:facet>
+				<h:commandLink value="Resetuj - ${obaveza.id}"
+					action="#{login.resetPassword}">
+					<f:param value="${user.id}" name="id" />
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+	
+</h:body>
+</html>

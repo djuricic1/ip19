@@ -25,6 +25,7 @@ public class StudentBean implements Serializable {
 	private FileDaoImpl fdi = new FileDaoImpl();
 	private BlogDaoImpl bdi = new BlogDaoImpl();
 	private ConnectionDaoImpl cdi = new ConnectionDaoImpl();
+	private int sessionId;
 	
 	public boolean login(String username, String password) {
 		if ((student = sdi.getStudentByNameAndPassword(username, password)) != null) {
@@ -122,5 +123,13 @@ public class StudentBean implements Serializable {
 	
 	public List<Integer> getRequestsSent(int studentId) {
 		return cdi.getRequestsSent(studentId);
+	}
+
+	public int getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(int sessionId) {
+		this.sessionId = sessionId;
 	}
 }

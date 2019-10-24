@@ -40,7 +40,7 @@ import dto.Student;
 
 @WebServlet("/Controller")
 @MultipartConfig
-public class Controller extends HttpServlet {
+public class Controller extends HttpServlet  {
 
 	private static final long serialVersionUID = 1L;
 	private StudentDaoImpl sdi = new StudentDaoImpl();
