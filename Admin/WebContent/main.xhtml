@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
 
 	<h:outputScript library="js" name="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" />
@@ -19,7 +20,16 @@
 	<br></br>
 	Ukupan broj registrovanih korisnika: 
 	<h:outputText value = "#{login.getNumberOfRegisteredUsers()}" />
+	
 	<br></br>
+	<h:form>
+	
+
+	<p:chart id="bar" type="bar" model="#{chartModel.liveBarModel}"
+			style="height:300px"></p:chart>
+	</h:form>
+	<br></br>
+	
 	<b>Korisnici</b>
 	<h:form>	
 		<h:dataTable value="${login.users}" var="user"
@@ -36,14 +46,14 @@
 			
 			<h:column>
 				<f:facet name="header">Deaktiviraj ga</f:facet>
-				<h:commandLink value="Deaktiviraj - ${obaveza.id}"
+				<h:commandLink value="Deaktiviraj"
 					action="#{login.blockUser}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
 			</h:column>
 			<h:column>
 				<f:facet name="header">Resetuj lozinku</f:facet>
-				<h:commandLink value="Resetuj - ${obaveza.id}"
+				<h:commandLink value="Resetuj"
 					action="#{login.resetPassword}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
