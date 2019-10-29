@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head>
+	
+<style type="text/css">
+    .value {
+        font-weight: bold;
+    }
+    
+  
+</style>
+	</h:head>
+   
+    <ui:composition>
+    <div id="formdiv" style=" margin:0 auto; width:30%;">
+        <h:form id="event_form">        
+           
+        	<h:panelGrid columns="1" cellpadding="5">
+	            
+	            <h:outputLabel value="Title:" />
+	            <h:message for="name" showDetail="true" style="color:red"/>	         
+	            <h:inputText id="name" value="#{eventBean.event.title}" style="width: 97%;" required="true" label="name" requiredMessage="Invalid data!">
+	             	<f:validateLength minimum="6" maximum="15"/>
+	            </h:inputText>
+	           	   
+	            <h:outputLabel value="Description:" />
+	              <h:message for="description" showDetail="true" style="color:red"/>	            
+	            <h:inputTextarea rows="6" cols="33" style="width: 97%;  resize: none;" id="description" value="#{eventBean.event.description}" requiredMessage="Invalid data!" required="true" label="description" >
+	           		<f:validateLength minimum="6" maximum="15"/>
+	            </h:inputTextarea>
+	            
+	            <h:outputLabel value="Image url:" />
+	            <h:inputText id="image" value="#{eventBean.event.imageUrl}" style="width: 97%;" required="true" label="image" />
+	            
+	            <h:outputLabel value="Start date:" />	        	
+	        	<p:calendar id="dateStart" style="width: 81.5%;" value="#{eventBean.startDate}" required="true" requiredMessage="Invalid data!" showOn="button" >
+	        	</p:calendar>
+	        	
+	        	<h:outputLabel value="End date" />
+	        	<p:calendar id="dateEnd" style="width: 81.5%;" value="#{eventBean.endDate}" required="true" requiredMessage="Invalid data!" showOn="button" >
+	        	</p:calendar>
+	        	
+	        	<p:selectOneMenu style="width:87%; margin-top:10px;" value="#{eventBean.event.category}">
+			       <f:selectItem itemLabel="Choose category" itemValue="" noSelectionOption="true" />
+			       <f:selectItems value="#{eventBean.categories}"></f:selectItems>
+	       	    </p:selectOneMenu>
+	       	    
+	            <f:facet name="footer">
+	                <h:commandButton value="Save" action="#{eventBean.saveEvent}"></h:commandButton>
+	            </f:facet>  
+        	</h:panelGrid>
+		</h:form>
+   	</div>	
+    </ui:composition>    
+</html>

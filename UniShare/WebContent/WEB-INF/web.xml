@@ -14,16 +14,5 @@ id="WebApp_ID" version="4.0">
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-<servlet-name>Jersey RESTful Application</servlet-name>
-<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-<init-param>
-<param-name>jersey.config.server.provider.packages</param-name>
-<param-value>api</param-value>
-</init-param>
-</servlet>	
-<servlet-mapping>
-<servlet-name>Jersey RESTful Application</servlet-name>
-<url-pattern>/api/*</url-pattern>
-</servlet-mapping>
+
 </web-app>

@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head />
+    <ui:composition>
+    	
+    	<h:form style=" margin:0 auto; width:30%;">
+    	<h:panelGrid columns="1" cellpadding="5">
+    	
+    		<h:outputText value= "Title: "></h:outputText>
+    	
+    		<h:message for="title" showDetail="true" style="color:red"/>	      
+    		<h:inputText value="${newsBean.news.title}" id="title"  style="width: 97%; resize: none;"  requiredMessage="Please enter title" required="true" validatorMessage=" 6 characters minimum">
+    			<f:validateLength minimum="6" maximum="15" for="title"/>
+    		</h:inputText>
+    		
+    		
+    		<h:outputText value="Sadržaj: "></h:outputText>
+    		<h:message for="content" showDetail="true" style="color:red"/> 	 
+    		<h:inputTextarea value="${newsBean.news.content}" id="content"  style="width: 97%;"  requiredMessage="Please enter content" required="true" validatorMessage="6 characters minimum">
+    			<f:validateLength minimum="6" maximum="15" for="content" />
+    		</h:inputTextarea>
+    		<h:outputText value=""></h:outputText>
+    		<h:commandButton value="Sačuvaj" action="#{newsBean.saveNews}"></h:commandButton>
+    		
+    	</h:panelGrid>
+    	</h:form>
+    	<h:outputText value="${obavezaBean.poruka}"></h:outputText>
+    </ui:composition>    
+</html>
