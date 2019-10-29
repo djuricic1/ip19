@@ -27,13 +27,9 @@ public class LoginBean implements Serializable {
 	 * 	
 	 */
 	private static final long serialVersionUID = 6955508471291131930L;
-	private SessionDao sd = new SessionDao();
-	private UserDao ud = new UserDao();
+
+
 	private AdminDao ad = new AdminDao();
-	
-	private ArrayList<User> users = (ArrayList<User>) ud.getAllUsers();
-	
-	
 	
 	
 	private String pwd;
@@ -97,38 +93,7 @@ public class LoginBean implements Serializable {
 		return "login";
 	}
 	
-	public int getNumberOfActiveUsers() {
-		return sd.getNumberOfActiveUsers();
-	}
-	
-	public int getNumberOfRegisteredUsers() {
-		return ud.getNumberOfRegisteredUsers();
-	}
 
-	public ArrayList<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(ArrayList<User> users) {
-		this.users = users;
-	}
-	
-	public void blockUser() {
-		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-		if (reqMap.containsKey("id")) {
-			int z = Integer.parseInt(reqMap.get("id"));
-			ud.blockUser(z, 1);
-		}
-		
-	}
-	public void resetPassword() {
-		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-		if (reqMap.containsKey("id")) {
-			int z = Integer.parseInt(reqMap.get("id"));
-			ud.randomlyResetUserPassword(z);
-		}
-		
-	}
 
 	public Admin getAdmin() {
 		return admin;

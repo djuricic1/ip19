@@ -17,10 +17,10 @@
 	
 
 	Broj trenutno aktivnih korisnika glavne aplikacije: 
-	<h:outputText value = "#{loginBean.getNumberOfActiveUsers()}" />
+	<h:outputText value = "#{sessionBean.getNumberOfActiveUsers()}" />
 	<br></br>
 	Ukupan broj registrovanih korisnika: 
-	<h:outputText value = "#{loginBean.getNumberOfRegisteredUsers()}" />
+	<h:outputText value = "#{sessionBean.getNumberOfRegisteredUsers()}" />
 	
 	<br></br>
 	<h:form>
@@ -33,7 +33,7 @@
 	
 	<b>Korisnici</b>
 	<h:form>	
-		<h:dataTable value="${loginBean.users}" var="user"
+		<h:dataTable value="${sessionBean.users}" var="user"
 			style="width: 100%; align: center">
 			<h:column>
 				<f:facet name="header">Username</f:facet>
@@ -48,14 +48,14 @@
 			<h:column>
 				<f:facet name="header">Deaktiviraj ga</f:facet>
 				<h:commandLink value="Deaktiviraj"
-					action="#{loginBean.blockUser}">
+					action="#{sessionBean.blockUser}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
 			</h:column>
 			<h:column>
 				<f:facet name="header">Resetuj lozinku</f:facet>
 				<h:commandLink value="Resetuj"
-					action="#{loginBean.resetPassword}">
+					action="#{sessionBean.resetPassword}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
 			</h:column>
