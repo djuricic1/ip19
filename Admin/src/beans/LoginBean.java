@@ -1,5 +1,6 @@
 package beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
@@ -7,14 +8,18 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+import dao.AdminDao;
 import dao.LoginDao;
 import dao.SessionDao;
 import dao.UserDao;
+import dto.Admin;
 import dto.User;
 
-@ManagedBean(name = "login")
+@ManagedBean(name = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
 
@@ -24,12 +29,18 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 6955508471291131930L;
 	private SessionDao sd = new SessionDao();
 	private UserDao ud = new UserDao();
+	private AdminDao ad = new AdminDao();
+	
 	private ArrayList<User> users = (ArrayList<User>) ud.getAllUsers();
+	
+	
+	
 	
 	private String pwd;
 	private String msg;
 	private String user;
-
+	private Admin admin = null;
+	
 	public String getPwd() {
 		return pwd;
 	}
@@ -58,12 +69,16 @@ public class LoginBean implements Serializable {
 	//validate login
 	public String validateUsernamePassword() {
 		
-		System.out.println("TEST 1234");
 		
 		boolean valid = LoginDao.validate(user, pwd);
 		if (valid) {
+			System.out.println("TEST 1234");
+			
 			HttpSession session = SessionUtils.getSession();
 			session.setAttribute("username", user);
+			System.out.println(user);
+			admin = ad.getByUsername(user);
+			//System.out.println(admin.getUsername());
 			return "main";
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
@@ -115,6 +130,12 @@ public class LoginBean implements Serializable {
 		
 	}
 
-	
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
 	
 }

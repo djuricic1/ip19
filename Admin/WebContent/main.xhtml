@@ -6,20 +6,21 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 
-	<h:outputScript library="js" name="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" />
-	<h:outputScript library="js" name="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" />
-	<h:outputScript library="js" name="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" />
-	<h:outputStylesheet library="css" name="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  />
-  		
   	
 	<title>login</title>
 </h:head>
+<f:metadata>
+	<f:event type="preRenderView" listener="#{sessionBean.onLoad}" />
+</f:metadata>
 <h:body>
+	
+	
+
 	Broj trenutno aktivnih korisnika glavne aplikacije: 
-	<h:outputText value = "#{login.getNumberOfActiveUsers()}" />
+	<h:outputText value = "#{loginBean.getNumberOfActiveUsers()}" />
 	<br></br>
 	Ukupan broj registrovanih korisnika: 
-	<h:outputText value = "#{login.getNumberOfRegisteredUsers()}" />
+	<h:outputText value = "#{loginBean.getNumberOfRegisteredUsers()}" />
 	
 	<br></br>
 	<h:form>
@@ -32,7 +33,7 @@
 	
 	<b>Korisnici</b>
 	<h:form>	
-		<h:dataTable value="${login.users}" var="user"
+		<h:dataTable value="${loginBean.users}" var="user"
 			style="width: 100%; align: center">
 			<h:column>
 				<f:facet name="header">Username</f:facet>
@@ -47,14 +48,14 @@
 			<h:column>
 				<f:facet name="header">Deaktiviraj ga</f:facet>
 				<h:commandLink value="Deaktiviraj"
-					action="#{login.blockUser}">
+					action="#{loginBean.blockUser}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
 			</h:column>
 			<h:column>
 				<f:facet name="header">Resetuj lozinku</f:facet>
 				<h:commandLink value="Resetuj"
-					action="#{login.resetPassword}">
+					action="#{loginBean.resetPassword}">
 					<f:param value="${user.id}" name="id" />
 				</h:commandLink>
 			</h:column>
