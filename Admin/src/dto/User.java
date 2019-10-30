@@ -5,6 +5,7 @@ public class User {
 	private String username;
 	private String name;
 	private String surname;
+	private int disabled;
 	
 	public String getUsername() {
 		return username;
@@ -29,6 +30,13 @@ public class User {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getDisabled() {
+		return disabled;
+	}
+	public void setDisabled(int disabled) {
+		this.disabled = disabled;
 	}
 	
 	

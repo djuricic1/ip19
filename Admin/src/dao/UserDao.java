@@ -93,15 +93,19 @@ ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
 
 		try {
 			connection = connectionPool.checkOut();
-			PreparedStatement pstmt = connection.prepareStatement("select id, name, surname, username from student");
+			PreparedStatement pstmt = connection.prepareStatement("select id, name, surname, username, disabled from student");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				User user = new User();
+				
 				user.setId(rs.getInt("id"));
 				user.setName(rs.getString("name"));
 				user.setSurname(rs.getString("surname"));
 				user.setUsername(rs.getString("username"));
 				
+				user.setDisabled(rs.getInt("disabled"));
+				
+		
 				users.add(user);
 			}
 			pstmt.close();

@@ -3,63 +3,85 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
 
   	
-	<title>login</title>
+	<title>Main</title>
 </h:head>
 <f:metadata>
 	<f:event type="preRenderView" listener="#{sessionBean.onLoad}" />
 </f:metadata>
-<h:body>
+	<h:body>
 	
 	
 
-	Broj trenutno aktivnih korisnika glavne aplikacije: 
+	<b>Broj trenutno aktivnih korisnika glavne aplikacije:</b> 
 	<h:outputText value = "#{sessionBean.getNumberOfActiveUsers()}" />
 	<br></br>
-	Ukupan broj registrovanih korisnika: 
+	<b>Ukupan broj registrovanih korisnika: </b> 
 	<h:outputText value = "#{sessionBean.getNumberOfRegisteredUsers()}" />
 	
 	<br></br>
+	<hr/>
 	<h:form>
-	
-
-	<p:chart id="bar" type="bar" model="#{chartModel.liveBarModel}"
-			style="height:300px"></p:chart>
+		<p:chart id="bar" type="bar" model="#{chartModel.liveBarModel}"
+				style="height:300px"></p:chart>
 	</h:form>
 	<br></br>
+	<hr/>
 	
-	<b>Korisnici</b>
+	<h3>Users</h3>
 	<h:form>	
-		<h:dataTable value="${sessionBean.users}" var="user"
+		<p:dataTable  id="usersTable" value="${sessionBean.users}" var="user"
 			style="width: 100%; align: center">
-			<h:column>
+			<p:column style="text-align:center">
 				<f:facet name="header">Username</f:facet>
 				<h:outputText value="${user.username}">
 				</h:outputText>
-			</h:column>
-			<h:column>
+			</p:column>
+			<p:column style="text-align:center">
 				<f:facet name="header">Name</f:facet>
 				<h:outputText value="${user.name}"></h:outputText>
-			</h:column>
+			</p:column>
 			
-			<h:column>
-				<f:facet name="header">Deaktiviraj ga</f:facet>
-				<h:commandLink value="Deaktiviraj"
-					action="#{sessionBean.blockUser}">
-					<f:param value="${user.id}" name="id" />
-				</h:commandLink>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Resetuj lozinku</f:facet>
-				<h:commandLink value="Resetuj"
-					action="#{sessionBean.resetPassword}">
-					<f:param value="${user.id}" name="id" />
-				</h:commandLink>
-			</h:column>
-		</h:dataTable>
+			<p:column style="text-align:center">
+		       <p:commandButton  actionListener="#{sessionBean.blockUser(user)}" value="#{user.disabled==1 ? 'Activate' : 'Deactivate'}"
+		        update="usersTable" style="width:190px;"/>
+			</p:column>
+			
+			<p:column style="text-align:center">				
+				<p:commandButton process="@this" action="#{sessionBean.resetPassword}" value="Reset" update="usersTable" resetValues="true">
+								<f:param name="id" value="${user.id}"></f:param>
+								<f:ajax render="usersTable"></f:ajax>
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	
+	<br/>
+	<hr/>
+	
+	<h3> News and events </h3>
+	<h:form id="newsAndEventsForm">	
+		<p:dataTable  id="newsAndEventsTable"  value="${sessionBean.newsAndEvents}" var="newsEvent"
+			style="width: 100%; align: center">
+			<p:column style="text-align:center">
+				<f:facet name="header" >Type</f:facet>
+				<h:outputText value="${(newsEvent.type.equals('news'))?'News':'Event'}"/>
+			</p:column>
+			
+			<p:column style="text-align:center">
+				<f:facet name="header" >Title</f:facet>
+				<h:outputText value="${newsEvent.title}"></h:outputText>
+			</p:column>
+			
+			<p:column style="text-align:center">
+
+				<p:commandButton value="Delete" update="newsAndEventsTable" actionListener="#{sessionBean.deleteNewsEvent(newsEvent)}" />						
+			</p:column>
+		</p:dataTable>
 	</h:form>
 	
 </h:body>

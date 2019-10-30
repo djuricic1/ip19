@@ -42,7 +42,6 @@ public class LoginBean implements Serializable {
 	}
 
 	public void setPwd(String pwd) {
-		System.out.println("test");
 		this.pwd = pwd;
 	}
 
@@ -68,14 +67,14 @@ public class LoginBean implements Serializable {
 		
 		boolean valid = LoginDao.validate(user, pwd);
 		if (valid) {
-			System.out.println("TEST 1234");
+			
 			
 			HttpSession session = SessionUtils.getSession();
 			session.setAttribute("username", user);
-			System.out.println(user);
+
 			admin = ad.getByUsername(user);
 			//System.out.println(admin.getUsername());
-			return "main";
+			return "main.xhtml?faces-redirect=true";
 		} else {
 			FacesContext.getCurrentInstance().addMessage(
 					null,

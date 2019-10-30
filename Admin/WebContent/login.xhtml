@@ -6,15 +6,15 @@
 	<title>login</title>
 </h:head>
 <h:body>
-	<h:form>
-		<h3>JSF Login Logout</h3>
-		<h:outputText value="Username" />
+	<h:form style=" margin:0 auto; width:30%;">
+		<h3> Admin application</h3>
+		<span style="width: 135px;">Username:</span>
 		<h:inputText id="username" value="#{loginBean.user}"></h:inputText>
 		<h:message for="username"></h:message>
 		<br></br><br></br>
 		
-		<h:outputText value="Password" />
-		<h:inputSecret id="password" value="#{loginBean.pwd}"></h:inputSecret>
+		<span style="min-width:135px;">Password:  </span>
+		<h:inputSecret id="password" value="#{loginBean.pwd}" ></h:inputSecret>
 		<h:message for="password"></h:message>	
 		<br></br><br></br>
 		

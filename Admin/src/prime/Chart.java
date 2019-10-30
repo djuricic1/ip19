@@ -56,14 +56,14 @@ public class Chart implements Serializable {
 
         liveBarModel.addSeries(engine1);
        
-        liveBarModel.setTitle("Broj korisnika po satu");
+        liveBarModel.setTitle("Number of users per hour");
         
  
         Axis xAxis = liveBarModel.getAxis(AxisType.X);
-        xAxis.setLabel("Sati");
+        xAxis.setLabel("Hours");
  
         Axis yAxis = liveBarModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Broj korisnika");
+        yAxis.setLabel("Number of users");
         yAxis.setMin(0);
         yAxis.setMax(max);
         liveBarModel.setShowPointLabels(true);
